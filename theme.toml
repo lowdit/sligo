@@ -1,8 +1,8 @@
 name = "sligo"
 license = "MIT"
-licenselink = "https://github.com/brtrdkeller/sligo/blob/master/LICENSE"
+licenselink = "https://github.com/lowdit/sligo/blob/master/LICENSE"
 description = "Publish a simple presentation with MarkDown Frontmatter"
-homepage = "https://github.com/brtrdkeller/sligo"
+homepage = "https://github.com/lowdit/sligo"
 tags = ["report"]
 features = ["Presentation"]
 [author]
