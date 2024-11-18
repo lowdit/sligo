@@ -1,0 +1,10 @@
+name = "sligo"
+license = "MIT"
+licenselink = "https://github.com/brtrdkeller/sligo/blob/master/LICENSE"
+description = "Publish a simple presentation with MarkDown Frontmatter"
+homepage = "https://github.com/brtrdkeller/sligo"
+tags = ["report"]
+features = ["Presentation"]
+[author]
+    name = "Bertrand Keller"
+    homepage = "https://bertrandkeller.info"

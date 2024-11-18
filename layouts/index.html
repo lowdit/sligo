@@ -1,0 +1,17 @@
+{{ define "main" }}
+{{ partialCached "utils/css.html" (dict "context" . "filefolder" "object" "filename" "form") "form" }}
+<div class="fg-wrapper">
+  <section class="page-header--c">
+    <h1 class="page-header-title">{{ .Title }}</h1>
+    {{ .Params.description | markdownify }}
+    {{ partialCached "content.html" .Content .Content }}
+    {{ if (hugo.IsServer) }}
+    <ul>
+    {{ range where .Pages ".Params.sitemapexclude" "!=" "true" }}
+      <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+    {{ end }}
+    </ul>
+    {{ end }}
+  </section>
+</div>
+{{ end }}

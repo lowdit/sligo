@@ -1,0 +1,27 @@
+[module]
+  [module.hugoVersion]
+    extended = true
+    min = "0.128.0"
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[frontmatter]
+  _merge = 'deep'
+[outputformats]
+  _merge = 'deep'
+[outputs]
+  _merge = 'deep'
+
+[outputFormats.presentation]
+  baseName = "presentation"
+  mediaType = "text/html"
+  notAlternative = false
+  permalinkable = true
+  isHTML = true
+
+[[cascade]]
+  _merge = 'deep'
+  outputs = ['presentation']
+  [cascade._target]
+    path = '/publication/**'
