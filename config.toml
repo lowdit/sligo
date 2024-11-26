@@ -3,6 +3,16 @@
     extended = true
     min = "0.128.0"
 
+defaultContentLanguage = "fr"
+defaultContentLanguageInSubdir = false
+enableInlineShortcodes = true
+removePathAccents = true
+
+[pagination]
+  disableAliases = false
+  pagerSize = 20
+  path = 'page'
+
 [markup.goldmark.renderer]
   unsafe = true
 
