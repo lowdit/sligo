@@ -45,7 +45,7 @@
     <meta property="og:title" content="{{ block "meta" . }}{{ .Title }}{{ end }}{{ with .Site.Title }} | {{ . }}{{ end }}">
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ .Permalink }}">
-    <meta property="og:locale" content="{{ $.Site.LanguageCode | default "fr" }}">
+    <meta property="og:locale" content="{{ $.Site.Language.Locale | default "fr" }}">
     {{ with $image | images.Filter $filter }}
     <meta property="og:image" content="{{ .Permalink }}" />
     {{ end }}
@@ -116,6 +116,42 @@
         li {
             max-width: 30ch;
         }
+
+        /* Quiz styles basiques */
+        .reveal-quiz { max-width: 60ch; margin: 2rem auto; }
+        .quiz-question h3 { margin-bottom: 1rem; }
+        .quiz-question ul {  margin: 0; padding: 0; }
+        .quiz-question li { display: flex; align-items: center; gap: 0.2em; margin: .5rem 0; }
+        .quiz-question button { width: 100%; background: #fff; }
+        .quiz-choice { padding: 1rem 1rem; font-size: 1.5rem; cursor: pointer; text-align: left;}
+        .quiz-choice.correct { background: #2b8a3e; color:#fff; }
+        .quiz-choice.wrong { background: #d64545; color:#fff; }
+        .quiz-explanation { margin:1rem auto; padding: .8rem; width: 80%; background:#111; color:#fff; border-radius:6px; }
+        .quiz-question ol li::before {
+            display: flex;
+            height: 100%;
+            aspect-ratio: 1/1;
+        }
+        h3 + hr {
+            margin: 1em 0;
+            border: none;
+        }
+        table {
+            font-size: 2rem;
+        }
+        th { 
+            background: #dedede;
+        } 
+        th:last-child { 
+            color: #fff;
+            background: #000;
+        } 
+        tr {
+            height: 80px;
+        }
+        th, td {
+            vertical-align: middle; 
+        }
     </style>
 </head>
 
@@ -153,6 +189,7 @@
             {{- with .focus }} data-background-color="#c61818" class="dark"{{ end }}
             {{- with .title }}{{- with (index (split . "|") 1) }} data-background-image="{{ $Path }}/images/{{ trim . " " }}" data-background-size="100%" data-background-color="#111"{{ end }}{{ end }}
             {{- with $.Scratch.Get "background" }} data-background-image="{{ $Path }}/{{ . }}" data-background-size="60%" data-background-color="#111"{{ end }}
+            {{- with .quiz }} class="reveal-quiz" data-quiz{{ end }}
             {{- with $value }}{{ range $key, $value := . }}{{ if eq $key "image" }} data-transition="fade"{{ end }}{{ end }}{{ end }}>
             {{ template "slides" (dict "context" $ "value" $value "key" $key "slides" $slides "path" $path "collection" $collection) }}
         </section>
@@ -164,6 +201,7 @@
     <script src="{{ $.Site.BaseURL | default "/" }}assets/js/markdown.js"></script>
     <script src="{{ $.Site.BaseURL | default "/" }}assets/js/notes.js"></script>
     <script src="{{ $.Site.BaseURL | default "/" }}assets/js/highlight.js"></script>
+    <script src="{{ $.Site.BaseURL | default "/" }}assets/js/reveal-quiz.js"></script>
     <script>
         let deck1 = new Reveal(document.querySelector('.deck1'), {
             controls: false,
@@ -180,6 +218,37 @@
             mouseWheel: true,
             touch: true
         });
+        
+        // Minimal quiz handler (fallback si pas de plugin)
+    function initInlineQuizzes() {
+      document.querySelectorAll('.reveal .reveal-quiz').forEach(quiz => {
+        quiz.querySelectorAll('.quiz-question').forEach(q => {
+          const choices = q.querySelectorAll('.quiz-choice');
+          choices.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              const correct = btn.getAttribute('data-correct') === 'true';
+              btn.setAttribute('aria-pressed', 'true');
+              btn.classList.add(correct ? 'correct' : 'wrong');
+              const explanation = q.querySelector('.quiz-explanation');
+              if (explanation) explanation.classList.remove('hide');
+              choices.forEach(b => b.disabled = true);
+            });
+            // keyboard activation
+            btn.addEventListener('keydown', (e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                btn.click();
+              }
+            });
+          });
+        });
+      });
+    }
+
+    // Initialize when DOM ready & on slide change (to handle dynamic slides)
+    document.addEventListener('DOMContentLoaded', initInlineQuizzes);
+    deck1.on('ready', initInlineQuizzes);
+    deck1.on('slidechanged', initInlineQuizzes);
     </script>
     {{ end }}
 </body>
@@ -200,7 +269,7 @@
     {{- with $value.title }}<h2 class="text-center">{{ replace (index (split . "|") 0) " " " " | markdownify | safeHTML }}</h2>{{ end }}
     {{- with $value.image }}
         {{- if and (not $collection) (fileExists (printf "content/%s/images" $path)) }}
-        {{- range $key, $value := where (readDir ) "Name" (trim (index (split . "|") 0) " ") }}
+        {{- range $key, $value := where (readDir (printf "content/%s/images" $path)) "Name" (trim (index (split . "|") 0) " ") }}
             <figure>
             {{- if in .Name ".svg" }}
                 {{ readFile (printf "./content/%s/images/%s" $path .Name) | safeHTML }}
@@ -232,4 +301,22 @@
     {{- with $value.texte }}<p>{{ replace (. | markdownify ) "<li>" "<li class='fragment'>" | safeHTML }}</p>{{ end }}
     {{- with $value.focus }}{{ . | markdownify | safeHTML }}{{ end }}
     {{- with $value.html }}{{ . | safeHTML }}{{ end }}
+    {{- /* Quiz block: support single quiz or slice of quizzes */ -}}
+    {{- with $value.quiz }}
+        {{- range $i, $q := . }}
+            <div class="quiz-question" data-question-index="{{ $i }}">
+            <h3>{{ $q.question | markdownify }}</h3>
+            <ol role="list">
+                {{- range $j, $c := $q.choices }}
+                <li role="listitem">
+                    <button class="quiz-choice" data-correct="{{ cond $c.correct "true" "false" }}" aria-pressed="false">{{ $c.text }}</button>
+                </li>
+                {{- end }}
+            </ol>
+            {{- range $j, $c := $q.choices }}
+            {{ with $c.explanation }}<div class="quiz-explanation hide" aria-hidden="true">{{ . | markdownify }}</div>{{ end }}
+            {{- end }}
+            </div>
+        {{- end }}
+    {{- end }}
 {{ end -}}
