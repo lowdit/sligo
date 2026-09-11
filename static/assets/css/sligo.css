@@ -1,6 +1,5 @@
 /* Sligo Alpha — layout first, decoration second. */
 
-
   .reveal *, .reveal *::before, .reveal *::after { box-sizing: border-box; }
   .reveal figure { margin: 0; }
   .reveal img, .reveal svg, .reveal video { max-width: 100%; }
@@ -32,6 +31,8 @@
   .reveal a { color: var(--sligo-violet); }
   .reveal .dark, .reveal .dark h1, .reveal .dark h2, .reveal .dark h3, .reveal .dark p, .reveal .dark li { color: var(--sligo-white); }
 
+
+
   .reveal .slides { width: 100%; height: 100%; }
 
   .reveal .slides section.sligo-slide {
@@ -45,10 +46,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
   }
 
   .sligo-cover { display: grid !important; place-items: center; }
-  .sligo-cover h1 { font-size: 5vw; max-width: 30ch; text-align: center; }
+  .sligo-cover h1 { max-width: 15ch; text-align: center; }
 
   .sligo-title {
     width: var(--sligo-content);
@@ -92,15 +94,16 @@
 
   /* COMPARE — vraie composition plein écran. */
   .sligo-slide:has(> .sligo-compare), .sligo-slide:has(> .sligo-aside) { padding: 0 !important; display: block !important; }
-  .sligo-recall { position: absolute; z-index: 5; inset: 0 0 auto; width: 100%; padding: 1vh 0;text-align: center; opacity: 1; pointer-events: none; background: white;}
+  .sligo-recall { position: absolute; z-index: 5; inset: 0 0 auto; padding: 0.5em 0; width: calc(100% - 2rem); font-size: 0.8em; text-align: center; opacity: 1; pointer-events: none; background: white;}
 
   .sligo-compare { width: 100vw; height: 100vh; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sligo-compare__column { --sligo-accent-text: var(--sligo-white); min-width: 0; min-height: 100vh; padding: clamp(3.5rem, 8vh, 7rem) clamp(1.5rem, 5vw, 6rem); display: flex !important; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: var(--sligo-accent); color: contrast-color(var(--sligo-accent)); }
-  .sligo-compare__column h2 { width: 100%; margin: 0 0 clamp(1.2rem, 4vh, 2.5rem); font-size: clamp(1.25rem, 3vw, 2.5rem); text-align: center;  color: contrast-color(var(--sligo-accent)); }
+  .sligo-compare__column h2 { width: 100%; margin: 0 0 clamp(1.2rem, 4vh, 2.5rem); font-size: clamp(1.25rem, 2.2vw, 2rem); text-align: center;  color: contrast-color(var(--sligo-accent)); }
   .sligo-compare__content { width: min(100%, 42ch); display: grid; gap: clamp(1rem, 3vh, 2rem); align-items: center; justify-items: center; }
   .sligo-compare__column .sligo-text { width: 100%; max-width: 42ch; color: inherit; }
   .sligo-compare__column .sligo-text ul, .sligo-compare__column .sligo-text ol { margin-inline: auto; }
   .sligo-compare__column .sligo-focus { width: 100%; border-color: currentColor; background: rgb(255 255 255 / .12); }
+  .sligo-color-default { --sligo-accent: #fff; --sligo-accent-text: #151d34; }
   .sligo-color-violet { --sligo-accent: #4631d4; }
   .sligo-color-blue { --sligo-accent: #164791; }
   .sligo-color-red { --sligo-accent: #c61818; }
@@ -109,22 +112,21 @@
 
   /* ASIDE — image / propos principal + contexte. */
   .sligo-aside { width: 100vw; height: 100vh; display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(18rem, .45fr); }
-  .sligo-aside__main, .sligo-aside__context { min-width: 0; min-height: 100vh; padding: clamp(3.5rem, 8vh, 7rem) clamp(1.5rem, 5vw, 4rem); display: flex !important; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+  .sligo-aside__main, .sligo-aside__context { min-width: 0; min-height: 100vh; padding: clamp(3.5rem, 8vh, 7rem) clamp(1.5rem, 5vw, 6rem); display: flex !important; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
   .sligo-aside__main { background: var(--sligo-bg); }
   .sligo-aside__context { background: var(--sligo-accent); color: var(--sligo-accent-text, white); }
-  .sligo-aside__main h2, .sligo-aside__context h2 { width: 100%; margin: 0 0 2.5rem; font-size: clamp(1.15rem, 2vw, 3.5rem); color: inherit; }
+  .sligo-aside__main h2, .sligo-aside__context h2 { width: 100%; margin: 0 0 1rem; font-size: clamp(1.15rem, 2vw, 1.8rem); color: inherit; }
   .sligo-aside__main .sligo-text, .sligo-aside__context .sligo-text { width: min(100%, 48ch); max-width: 48ch; }
   .sligo-aside__context .sligo-focus { border-color: currentColor; background: rgb(255 255 255 / .12); }
   .sligo-aside__context .sligo-media img, .sligo-aside__context .sligo-media svg { max-height: 48vh; }
-  .sligo-aside__content {width: 100%; height: 100%;}
 
   /* STEPS — progression, pas une liste. */
-  .sligo-steps { width: min(90vw, 100rem); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: start; }
+  .sligo-steps { width: min(90vw, 75rem); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: start; }
   .sligo-step { position: relative; min-width: 0; padding: 0 clamp(.6rem, 2vw, 2rem); text-align: center; }
-  .sligo-step::after { content: ""; position: absolute; top: 1.6rem; left: 50%; width: 100%; height: 1px; background: currentColor; opacity: .22; }
+  .sligo-step::after { content: ""; position: absolute; top: 1.1rem; left: 50%; width: 100%; height: 1px; background: currentColor; opacity: .22; }
   .sligo-step:last-child::after { display: none; }
-  .sligo-step__number { position: relative; z-index: 1; display: grid; place-items: center; width: 3.2rem; height: 3.2rem; margin: 0 auto 1.3rem; border: 3px solid currentColor; border-radius: 50%; background: var(--sligo-bg); font-size: .55em; }
-  .sligo-step h2 { position: relative; z-index: 1; margin: 0 0 .5em; padding: 0; max-width: 100%; font-size: clamp(1rem, 1.8vw, 1.6rem); text-align: center;}
+  .sligo-step__number { position: relative; z-index: 1; display: grid; place-items: center; width: 2.2rem; height: 2.2rem; margin: 0 auto 1.3rem; border: 1px solid currentColor; border-radius: 50%; background: var(--sligo-bg); font-size: .55em; }
+  .sligo-step h2 { position: relative; z-index: 1; margin: 0 0 .5em; font-size: clamp(1rem, 1.8vw, 1.6rem); }
   .sligo-step > div { font-size: .65em; color: var(--sligo-muted); }
 
   /* STATS — chiffre léger, pas dashboard. */
@@ -145,8 +147,8 @@
   /* CARDS — apparition successive assumée. */
   .sligo-cards { width: min(88vw, 78rem); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 2vw, 2rem); align-items: stretch; }
   .sligo-card { min-width: 0; padding: clamp(1.2rem, 2.5vw, 2.2rem); border: 1px solid var(--sligo-line); border-radius: var(--sligo-radius); background: var(--sligo-white); box-shadow: var(--sligo-shadow); text-align: left; }
-  .sligo-card h2 { display: grid; place-items: center; margin: 0 0 1em; min-height: 2lh; font-size: clamp(1.1rem, 1.7vw, 1.6rem); }
-  .sligo-card__text { font-size: .72em; color: var(--sligo-muted); text-align: center;}
+  .sligo-card h2 { margin: 0 0 .5em; font-size: clamp(1.1rem, 1.7vw, 1.6rem); }
+  .sligo-card__text { font-size: .72em; color: var(--sligo-muted); }
 
   /* CODE */
   .sligo-code { width: min(88vw, 70rem); position: relative; }
@@ -156,10 +158,10 @@
   /* QUIZ */
   .sligo-quiz { width: min(88vw, 68rem); display: grid; gap: clamp(1.2rem, 3vh, 2rem); }
   .sligo-quiz h2 { max-width: 28ch; margin: 0 auto; text-align: center; font-size: clamp(1.4rem, 3vw, 2.7rem); }
-  .sligo-quiz__choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; line-height: 1.2;}
+  .sligo-quiz__choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
   .sligo-quiz__choice { min-width: 0; min-height: 5rem; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 1rem; padding: 1rem 1.2rem; border: 1px solid var(--sligo-line); border-radius: var(--sligo-radius); background: white; color: var(--sligo-ink); font: inherit; text-align: left; cursor: pointer; transition: transform .18s ease, border-color .18s ease, background-color .18s ease; }
   .sligo-quiz__choice:hover, .sligo-quiz__choice:focus-visible { transform: translateY(-2px); border-color: var(--sligo-violet); outline: none; }
-  .sligo-quiz__letter { display: grid; place-items: center; width: 3rem; height: 2rem; border-radius: 50%; font-size: 0.8em; font-weight: 800; }
+  .sligo-quiz__letter { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--sligo-cream); font-size: .6em; font-weight: 800; }
   .sligo-quiz__choice.is-correct { border-color: #238636; background: #eaf7ed; }
   .sligo-quiz__choice.is-wrong { border-color: var(--sligo-red); background: #fff0f0; }
   .sligo-quiz__feedback { padding: 1rem 1.2rem; border-inline-start: .25rem solid var(--sligo-violet); background: color-mix(in srgb, var(--sligo-violet) 7%, white); text-align: center; }
@@ -196,4 +198,82 @@
 
 @media (prefers-reduced-motion: reduce) {
   .reveal .fragment, .reveal .sligo-statement__text { transition: none !important; animation: none !important; }
+}
+
+/* RADIAL — composition organisationnelle en HTML/CSS, sans SVG ni JS. */
+.sligo-slide:has(> .sligo-radial) { padding: 0 !important; }
+.sligo-radial {
+  --sligo-radial-radius: min(31vh, 27vw);
+  position: relative;
+  width: min(92vw, 84rem);
+  height: min(82vh, 50rem);
+  margin: auto;
+  display: grid;
+  place-items: center;
+}
+.sligo-radial::before {
+  content: "";
+  position: absolute;
+  width: calc(var(--sligo-radial-radius) * 2);
+  height: calc(var(--sligo-radial-radius) * 2);
+  border: 1px solid var(--sligo-line);
+  border-radius: 50%;
+  opacity: .8;
+}
+.sligo-radial__center {
+  position: relative;
+  z-index: 2;
+  width: clamp(11rem, 18vw, 17rem);
+  aspect-ratio: 1;
+  padding: 1.2rem;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: .35rem;
+  border-radius: 50%;
+  background: var(--sligo-blue);
+  color: var(--sligo-white);
+  text-align: center;
+  box-shadow: 0 1rem 3rem rgb(21 29 52 / .16);
+}
+.sligo-radial__center small { font-size: .52em; opacity: .75; text-transform: uppercase; letter-spacing: .08em; }
+.sligo-radial__center strong { max-width: 9ch; font-size: clamp(1.25rem, 2.5vw, 2.4rem); line-height: .95; }
+.sligo-radial__center span { max-width: 18ch; font-size: .52em; opacity: .8; }
+.sligo-radial__item {
+  --sligo-radial-x: calc(cos(var(--sligo-radial-angle)) * var(--sligo-radial-radius));
+  --sligo-radial-y: calc(sin(var(--sligo-radial-angle)) * var(--sligo-radial-radius));
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  width: clamp(9.5rem, 13vw, 13rem);
+  min-height: clamp(9.5rem, 13vw, 13rem);
+  transform: translate(-50%, -50%) translate(var(--sligo-radial-x), var(--sligo-radial-y));
+  padding: 1.1rem;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: .3rem;
+  border: .16rem solid var(--sligo-violet);
+  border-radius: 50%;
+  background: var(--sligo-white);
+  color: var(--sligo-ink);
+  text-align: center;
+  box-shadow: 0 .5rem 1.5rem rgb(21 29 52 / .10);
+}
+.sligo-radial__item strong { max-width: 10ch; font-size: clamp(1rem, 1.45vw, 1.35rem); line-height: 1.02; }
+.sligo-radial__item small { max-width: 16ch; color: var(--sligo-muted); font-size: .48em; line-height: 1.1; }
+.sligo-radial__icon { font-size: 1.4em; line-height: 1; }
+
+/* ACTIONS — choses concrètes à lancer dans l'organisation. */
+.sligo-action-map { width: min(90vw, 82rem); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 2vw, 2rem); }
+.sligo-action { min-width: 0; padding: clamp(1.1rem, 2vw, 2rem); border-top: .35rem solid var(--sligo-violet); background: var(--sligo-white); box-shadow: var(--sligo-shadow); }
+.sligo-action h2 { margin: 0 0 .45em; font-size: clamp(1rem, 1.5vw, 1.45rem); }
+.sligo-action p { margin: 0; font-size: .62em; color: var(--sligo-muted); }
+.sligo-action strong { display: block; margin-top: .7em; font-size: .62em; }
+
+@media (max-width: 900px) {
+  .sligo-radial { --sligo-radial-radius: min(26vh, 25vw); height: 70vh; }
+  .sligo-radial__item { width: 8rem; min-height: 8rem; padding: .7rem; }
+  .sligo-action-map { grid-template-columns: 1fr; }
 }

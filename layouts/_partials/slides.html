@@ -1,17 +1,7 @@
 {{- $slide := .value -}}
 {{- $context := .context -}}
 {{- $path := .path -}}
-{{- $key := .key -}}
 {{- $collection := .collection -}}
-{{- $titlepart := .titlepart -}}
-
-
-{{/*
-{{- $previous := index .slides (add $key -1) -}}
-{{- $slidetitle := cond (not $previous.title) $slide.title (cond (not $slide.title) $previous.title $slide.title) -}}
-*/}}
-
-{{ $slidetitle := cond (not $titlepart) $slide.title (cond (not $slide.title) $titlepart (printf "%s - %s" $titlepart $slide.title)) }}
 
 {{/*
   Sligo Alpha renderer.
@@ -20,14 +10,14 @@
 
 {{- if $slide.part -}}
   <div class="sligo-part">
-    <h2>{{ $slide.part | markdownify | safeHTML }}</h2>
+    <h1>{{ $slide.part | plainify }}</h1>
   </div>
 
 {{- else if $slide.compare -}}
-  {{- with $slidetitle }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  {{- with $slide.title }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
   <div class="sligo-compare">
     {{- range $index, $column := $slide.compare -}}
-      {{- $color := default "" $column.color -}}
+      {{- $color := default "default" $column.color -}}
       <article class="sligo-compare__column sligo-color-{{ $color }}">
         <div class="sligo-compare__content">
           {{- with $column.title }}<h2>{{ . | markdownify | safeHTML }}</h2>{{ end -}}
@@ -40,7 +30,7 @@
   </div>
 
 {{- else if $slide.aside -}}
-  {{- with $slidetitle }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  {{- with $slide.title }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
   <div class="sligo-aside">
     {{- range $index, $panel := $slide.aside -}}
       {{- $color := default "violet" $panel.color -}}
@@ -66,8 +56,30 @@
     {{- end -}}
   </div>
 
+{{- else if $slide.radial -}}
+  {{- with $slide.title }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  <div class="sligo-radial" style="--sligo-radial-count: {{ len $slide.radial.items }};">
+    <div class="sligo-radial__center">
+      {{- with $slide.radial.center.eyebrow }}<small>{{ . | markdownify | safeHTML }}</small>{{ end -}}
+      <strong>{{ $slide.radial.center.title | markdownify | safeHTML }}</strong>
+      {{- with $slide.radial.center.note }}<span>{{ . | markdownify | safeHTML }}</span>{{ end -}}
+    </div>
+    {{- range $index, $item := $slide.radial.items -}}
+      {{- $angle := mul (div 360.0 (len $slide.radial.items)) $index -}}
+      {{- if reflect.IsMap $item -}}
+        <div class="sligo-radial__item{{ if $slide.radialReveal }} fragment{{ end }}" style="--sligo-radial-angle: {{ $angle }}deg;">
+          {{- with $item.icon }}<span class="sligo-radial__icon" aria-hidden="true">{{ . }}</span>{{ end -}}
+          <strong>{{ $item.title | markdownify | safeHTML }}</strong>
+          {{- with $item.note }}<small>{{ . | markdownify | safeHTML }}</small>{{ end -}}
+        </div>
+      {{- else -}}
+        <div class="sligo-radial__item{{ if $slide.radialReveal }} fragment{{ end }}" style="--sligo-radial-angle: {{ $angle }}deg;"><strong>{{ $item | markdownify | safeHTML }}</strong></div>
+      {{- end -}}
+    {{- end -}}
+  </div>
+
 {{- else if $slide.steps -}}
-  {{- with $slidetitle }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  {{- with $slide.title }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
   <div class="sligo-steps">
     {{- range $index, $step := $slide.steps -}}
       <article class="sligo-step fragment">
@@ -91,7 +103,7 @@
   </div>
 
 {{- else if $slide.stats -}}
-  {{- with $slidetitle }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  {{- with $slide.title }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
   <div class="sligo-stats">
     {{- range $stat := $slide.stats -}}
       <article class="sligo-stat fragment" data-stat-value="{{ $stat.value }}">
@@ -111,10 +123,10 @@
   </div>
 
 {{- else if $slide.cards -}}
-  {{- with $slidetitle }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  {{- with $slide.title }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
   <div class="sligo-cards">
     {{- range $card := $slide.cards -}}
-      <article class="sligo-card fragment">
+      <article class="sligo-card{{ if $slide.cardsReveal }} fragment{{ end }}">
         {{- with $card.image }}<div class="sligo-card__media">{{ partial "presentation/image" (dict "image" . "context" $context "path" $path "collection" $collection) }}</div>{{ end -}}
         {{- with $card.title }}<h2>{{ . | markdownify | safeHTML }}</h2>{{ end -}}
         {{- with $card.texte }}<div class="sligo-card__text">{{ . | markdownify | safeHTML }}</div>{{ end -}}
@@ -123,14 +135,13 @@
   </div>
 
 {{- else if $slide.code -}}
-  {{- with $slidetitle }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
   <div class="sligo-code">
     {{- with $slide.code.language }}<div class="sligo-code__language">{{ . }}</div>{{ end -}}
     <pre><code class="language-{{ default "text" $slide.code.language }}">{{ $slide.code.content | htmlEscape }}</code></pre>
   </div>
 
 {{- else if $slide.quiz -}}
-  {{- with $slidetitle }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  {{- with $slide.title }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
   <div class="sligo-quiz" data-quiz>
     {{- with $slide.quiz }}<h2>{{ .question | markdownify | safeHTML }}</h2>{{ end -}}
     <div class="sligo-quiz__choices">
@@ -145,7 +156,7 @@
   </div>
 
 {{- else -}}
-  {{- with $slidetitle }}<h2 class="sligo-title{{ if $slide.fit }} sligo-title--fit{{ end }}">{{ . | markdownify | safeHTML }}</h2>{{ end -}}
+  {{- with $slide.title }}<h2 class="sligo-title{{ if $slide.fit }} sligo-title--fit{{ end }}">{{ . | markdownify | safeHTML }}</h2>{{ end -}}
   {{- with $slide.image }}<div class="sligo-media">{{ partial "presentation/image" (dict "image" . "context" $context "path" $path "collection" $collection) }}</div>{{ end -}}
   {{- with $slide.keyboard }}
     <div class="sligo-keyboard">
