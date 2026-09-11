@@ -1,53 +1,91 @@
-{{- define "main" -}}
-  <!--$paginator-->
-  {{- if .IsHome -}}
-    {{- .Scratch.Set "Paginator" (.Paginate (where .Site.RegularPages "Page.Type" "in" site.Params.mainSections)) }}
-  {{- else -}}
-    {{ .Scratch.Set "Paginator" (.Paginate .RegularPagesRecursive) }}
-  {{- end -}}
+{{ define "main" -}}
+{{- partial "utils/nav-depth" . -}}
+<div class="container--sm">
+  <section class="page-header">
+    <h1 class="page-header-title">{{ .Title }}</h1>
+    <p class="page-header-desc">
+      {{- with .Params.Summary -}}
+        {{- . -}}
+      {{- else -}}
+        {{- with .Description -}}
+          {{- . | markdownify -}}
+        {{- end -}}
+      {{- end -}}
+    </p>
+    {{- if (eq .Type "study") }}
+    {{- partial "print/links" (dict "context" . "class" "padding-baseline") -}}
+    {{- end }}
+  </section>
+  <section{{- with .Params.autonumbering }} autonumbering{{- end }}>
+    {{ $.Scratch.Set "menu" slice }}
+    {{ if eq .Type "study" }}
+      {{ range (.Paginate .RegularPagesRecursive).Pages }}
+        {{- if (eq .Parent.Type "study") }}
+          {{- $.Scratch.Add "menu" .Title }}
+        {{- end }}
+      {{- end }}
+      {{- if gt (len ($.Scratch.Get "menu")) 0 }}
+      <div class="tableofcontents">
+        <ol>
+          {{ range ($.Scratch.Get "menu") }}
+            <li><a href="#{{ anchorize . }}">{{ . }}</a></li>
+          {{ end }}
+        </ul>
+      </div>
+      {{- end }}
+    {{- end }}
+      {{- if eq .Type "study" }}
+        {{- if .Param "autonumbering" }}
+        <style>
+          /* Auto Numbering */
+            body {counter-reset: h2}
+            h2 {counter-reset: h3}
+            h3 {counter-reset: h4}
+            h4 {counter-reset: h5}
 
-  {{- $paginator:=(.Scratch.Get "Paginator") -}}
+            section[autonumbering] h2:before {counter-increment: h2; content: ""}
+            section[autonumbering] h3:before {counter-increment: h3; content: counter(h2) "." counter(h3) ". "}
+            section[autonumbering] h4:before {counter-increment: h4; content: counter(h2) "." counter(h3) "." counter(h4) ". "}
 
-  <div class="content-grid">
-    <div class="section-header section-line section-background {{ if ne .Section "expertise" }}full-width{{ end }}">
-      
-    <div class="m-0">
-    {{- .Content -}}
-    {{- $.Scratch.Set "linksingle" .RelPermalink -}}
-    {{- $.Scratch.Set "hassection" .Sections -}}
-    {{- $sectionTitle := (.Site.GetPage .Section).Title -}}
-    {{- range $id, $value := $paginator.Pages -}}
-      <article class="flex flex-reverse align-items section-line">
-        {{- $path := "" }}
-        {{- with .File }}{{ $path = .Path }}{{ end }}
-        <section class="padding-block">
-          <h2 class="title-main"><a href="{{ .Permalink }}">{{ if .Title }}{{ .Title }}{{ else }}{{ $sectionTitle }} {{ replace (path.Base $path) (path.Ext $path) "" }}{{ end }}</a></h2>
-          {{- if or .Date ($.Scratch.Get "hassection") -}}
-          <p style="display:block;margin-top:-1.5em;">
-            {{- if .Date -}}<time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" | safeHTML }}">{{ .Date.Day }} {{ index $.Site.Data.month (printf "%d" .Date.Month) }} {{ .Date.Year }}</time>{{ end }}
-            {{- if $.Scratch.Get "hassection" -}}{{ if lt (len (split ($.Scratch.Get "linksingle") "/")) 4 }} pour <a href="{{ $.Site.BaseURL | default "/" }}{{ index (last 3 (split (delimit (split .RelPermalink "/") "," "") ",")) 0 }}/{{ index (last 2 (split (delimit (split .RelPermalink "/") "," "") ",")) 0 }}/">{{ index (last 2 (split (delimit (split .RelPermalink "/") "," "") ",")) 0 }}</a>{{- end -}}{{- end -}}
-          </p>
-          {{- end -}}
-          <p>Veniam ut irure id excepteur nisi occaecat Lorem est dolore velit nostrud pariatur ipsum laboris.</p>
-          {{- if .Params.summary -}}
-          <p>{{ .Params.summary }}</p>
-          {{- end -}}
-          <p>
-            <a class="btn btn-more" href="{{ .Permalink }}" title="{{ .Title }}">
-              <span>{{ i18n "link-access-more" }}</span>
-            </a>
-          </p>
-        </section>
-        {{- with .Params.image }}
-        <aside>
-          {{ partial "elements/images.html" (dict "image" . "title" "" "alt" "" "class" "padding-block") | replaceRE "<link rel='preload' as='image' srcset='" "<link rel='preload' as='image' imagesrcset='" | safeHTML }}
-        </aside>
+            section[autonumbering] .toc__menu ul { counter-reset: item }
+            section[autonumbering] .toc__menu li a:before { content: counters(item, ".") ". "; counter-increment: item }
+        </style>
+        {{- end }}
+        {{- range $id, $value := (.Paginate .RegularPagesRecursive).Pages }}
+          <div class="study-element study-element-{{ add $id 1 }}">
+          {{- if (eq .Parent.Type "study") }}
+            <h2 id="{{ anchorize .Title }}">
+              {{ add $id 1 }}. {{ .Title }}
+              <a href="#{{ anchorize .Title | safeURL }}"></a>
+            </h2>
+            <div class="title-increment">
+            {{- partial "content.html" .Content .Content }}
+            <br>
+            <hr>
+            <br>
+          {{- end }}
+          </div>
+        {{- end }}
+      {{- else }}
+        {{ $range1 := cond (ne (len .Sections) 0) .Sections .RegularPages }}
+        {{ $range2 := cond (ne (len .Sections) 0) .RegularPages .Sections }}
+        {{ $rangecond := not (and $range1 $range2) }}
+        {{ with $range1 }}
+          <h2 {{ if and (not $.Content) $rangecond }} hidden{{ end }}>Sections</h2>
+          {{- range $id, $value := . }}
+            {{ partial "posts/post-entry.html" . }}
+        {{- end }}
         {{ end -}}
-      </article>
-  {{- end -}}
-  <!--pagination-->
-  <br>
-  {{- partial "navigations/paginator.html" . -}}
-  </div>
+        {{ with $range2 }}
+          <h2 {{ if and (not $.Content) $rangecond }} hidden{{ end }}>Articles</h2>
+          {{- range $id, $value := . }}
+            {{ partial "posts/post-entry.html" . }}
+          {{- end }}
+        {{ end -}}
+      {{- end }}
+      {{- $pages := where (where (.GetPage "interviews").RegularPagesRecursive "Params.slugpath" "eq" "digital-accessibility") "Title" "ne" "Model" }}
+      {{ template "_internal/pagination.html" . }}
+      {{ with .Content }}{{ partial "content.html" . . }}{{- end }}
+  </section>
 </div>
-{{- end -}}
+{{ end }}

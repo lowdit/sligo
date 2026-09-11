@@ -88,8 +88,8 @@
 <div class="debugprint_wrap">
   {{- if $typeIsSiteInfo -}}
   <!-- https://github.com/gohugoio/hugo/blob/master/hugolib/site.go -->
-  {{- $siteVarNames   := (slice "Title" "Author" "Social" "LastChange" "DisqusShortname" "GoogleAnalytics" "Copyright" "RSSLink" "LanguageCode" "BuildDrafts" "Params") -}}
-  {{- $siteVarSymbols := (slice .Title  .Author  .Social  .LastChange  .DisqusShortname  .GoogleAnalytics  .Copyright  .RSSLink  .LanguageCode  .BuildDrafts  .Params ) -}}
+  {{- $siteVarNames   := (slice "Title" "Author" "Social" "LastChange" "DisqusShortname" "GoogleAnalytics" "Copyright" "RSSLink" "LanguageLocale" "BuildDrafts" "Params") -}}
+  {{- $siteVarSymbols := (slice .Title  .Author  .Social  .LastChange  .DisqusShortname  .GoogleAnalytics  .Copyright  .RSSLink  .Language.Locale  .BuildDrafts  .Params ) -}}
   <table class="debugprint">
     <tr>
       <th class="key">SiteInfo Variable</th>

@@ -1,0 +1,32 @@
+{{- $image := .image -}}
+{{- $context := .context -}}
+{{- $path := .path -}}
+{{- $collection := .collection -}}
+{{- $parts := split $image "|" -}}
+{{- $name := trim (index $parts 0) " " -}}
+{{- $caption := "" -}}
+{{- if gt (len $parts) 1 }}{{ $caption = trim (index $parts 1) " " }}{{ end -}}
+
+{{- with ($collection.GetMatch (printf "{**/,*}%s" $name)) -}}
+  <figure class="sligo-figure">
+    {{- if strings.HasSuffix .Name ".svg" -}}
+      {{ readFile (printf "./content/%s/%s" $path .Name) | safeHTML }}
+    {{- else -}}
+      <img src="{{ .RelPermalink }}" alt="" class="sligo-image" loading="eager" decoding="async">
+    {{- end -}}
+    {{- with $caption }}<figcaption>{{ . | markdownify | safeHTML }}</figcaption>{{ end -}}
+  </figure>
+{{- else -}}
+  {{- if and (not $collection) (fileExists (printf "content/%s/images/%s" $path $name)) -}}
+    <figure class="sligo-figure">
+      {{- if strings.HasSuffix $name ".svg" -}}
+        {{ readFile (printf "./content/%s/images/%s" $path $name) | safeHTML }}
+      {{- else -}}
+        <img src="{{ printf "%s%s/images/%s" $context.Site.BaseURL $path $name }}" alt="" class="sligo-image" loading="eager" decoding="async">
+      {{- end -}}
+      {{- with $caption }}<figcaption>{{ . | markdownify | safeHTML }}</figcaption>{{ end -}}
+    </figure>
+  {{- else -}}
+    <p class="sligo-missing">Image missing: {{ $name }}</p>
+  {{- end -}}
+{{- end -}}

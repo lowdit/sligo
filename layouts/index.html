@@ -1,17 +1,18 @@
 {{ define "main" }}
 {{ partialCached "utils/css.html" (dict "context" . "filefolder" "object" "filename" "form") "form" }}
-<div class="fg-wrapper">
+{{ partialCached "utils/css.html" (dict "context" . "filefolder" "object" "filename" "card") "card" }}
+<div>
   <section class="page-header--c">
     <h1 class="page-header-title">{{ .Title }}</h1>
     {{ .Params.description | markdownify }}
     {{ partialCached "content.html" .Content .Content }}
-    {{ if (hugo.IsServer) }}
-    <ul>
+    <div class="grid center">
     {{ range where .Pages ".Params.sitemapexclude" "!=" "true" }}
-      <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+      <div class="card">
+        <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
+      </div>
     {{ end }}
-    </ul>
-    {{ end }}
+    </div>
   </section>
 </div>
 {{ end }}

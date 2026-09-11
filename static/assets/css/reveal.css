@@ -57,7 +57,7 @@ footer, header, hgroup, main, menu, nav, section {
    --r-main-color: #222;
    --r-block-margin: 20px;
    --r-heading-margin: 0 0 20px 0;
-   --r-heading-font: Source Sans Pro, Helvetica, sans-serif;
+   --r-heading-font: 'tt norms', Helvetica, sans-serif;
    --r-heading-color: #222;
    --r-heading-line-height: 1.2;
    --r-heading-letter-spacing: normal;
@@ -532,7 +532,6 @@ Monokai style - ported by Luigi Maselli - http://grigio.org
   }
 
   .reveal h2 {
-    margin: auto;
     max-width: 80vw;
     text-transform: uppercase;
     text-align: center;
@@ -553,6 +552,7 @@ Monokai style - ported by Luigi Maselli - http://grigio.org
   .reveal p {
     max-width: 80%;
     margin: var(--r-block-margin) auto;
+    font-size: 80%;
   }
 
   .print-pdf .container.present {

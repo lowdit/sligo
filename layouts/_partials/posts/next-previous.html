@@ -1,0 +1,15 @@
+{{ if or (.PrevInSection) (.NextInSection) }}
+  <section class="no-print">
+    <h2>{{ i18n "read-next" }}</h2>
+    <nav class="single-next-previous" aria-label="{{ i18n "read-next" }}">
+      <ul class="list-unstyled">
+      {{ with .PrevInSection }}
+        <li><a class="previous" href="{{.Permalink}}">&laquo; {{ .Title }}</a></li>
+      {{ end }}
+      {{ with .NextInSection }}
+        <li><a class="next" href="{{.Permalink}}">{{ .Title }} &raquo;</a></li>
+      {{ end }}
+      </ul>
+    </nav>
+  </section>
+{{ end }}

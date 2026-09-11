@@ -1,0 +1,161 @@
+{{- $slide := .value -}}
+{{- $context := .context -}}
+{{- $path := .path -}}
+{{- $key := .key -}}
+{{- $collection := .collection -}}
+{{- $titlepart := .titlepart -}}
+
+
+{{/*
+{{- $previous := index .slides (add $key -1) -}}
+{{- $slidetitle := cond (not $previous.title) $slide.title (cond (not $slide.title) $previous.title $slide.title) -}}
+*/}}
+
+{{ $slidetitle := cond (not $titlepart) $slide.title (cond (not $slide.title) $titlepart (printf "%s - %s" $titlepart $slide.title)) }}
+
+{{/*
+  Sligo Alpha renderer.
+  Le Markdown décrit le contenu ; ce partial décrit seulement la composition.
+*/}}
+
+{{- if $slide.part -}}
+  <div class="sligo-part">
+    <h2>{{ $slide.part | markdownify | safeHTML }}</h2>
+  </div>
+
+{{- else if $slide.compare -}}
+  {{- with $slidetitle }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  <div class="sligo-compare">
+    {{- range $index, $column := $slide.compare -}}
+      {{- $color := default "" $column.color -}}
+      <article class="sligo-compare__column sligo-color-{{ $color }}">
+        <div class="sligo-compare__content">
+          {{- with $column.title }}<h2>{{ . | markdownify | safeHTML }}</h2>{{ end -}}
+          {{- with $column.image }}<div class="sligo-media">{{ partial "presentation/image" (dict "image" . "context" $context "path" $path "collection" $collection) }}</div>{{ end -}}
+          {{- with $column.texte }}<div class="sligo-text sligo-auto-fragments">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+          {{- with $column.focus }}<div class="sligo-focus">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+        </div>
+      </article>
+    {{- end -}}
+  </div>
+
+{{- else if $slide.aside -}}
+  {{- with $slidetitle }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  <div class="sligo-aside">
+    {{- range $index, $panel := $slide.aside -}}
+      {{- $color := default "violet" $panel.color -}}
+      {{- if eq $index 0 -}}
+        <article class="sligo-aside__main">
+          <div class="sligo-aside__content">
+          {{- with $panel.title }}<h2>{{ . | markdownify | safeHTML }}</h2>{{ end -}}
+          {{- with $panel.image }}<div class="sligo-media">{{ partial "presentation/image" (dict "image" . "context" $context "path" $path "collection" $collection) }}</div>{{ end -}}
+          {{- with $panel.texte }}<div class="sligo-text sligo-auto-fragments">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+          {{- with $panel.focus }}<div class="sligo-focus">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+          </div>
+        </article>
+      {{- else -}}
+        <aside class="sligo-aside__context sligo-color-{{ $color }}">
+          <div class="sligo-aside__content">
+          {{- with $panel.title }}<h2>{{ . | markdownify | safeHTML }}</h2>{{ end -}}
+          {{- with $panel.image }}<div class="sligo-media">{{ partial "presentation/image" (dict "image" . "context" $context "path" $path "collection" $collection) }}</div>{{ end -}}
+          {{- with $panel.texte }}<div class="sligo-text sligo-auto-fragments">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+          {{- with $panel.focus }}<div class="sligo-focus">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+          </div>
+        </aside>
+      {{- end -}}
+    {{- end -}}
+  </div>
+
+{{- else if $slide.steps -}}
+  {{- with $slidetitle }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  <div class="sligo-steps">
+    {{- range $index, $step := $slide.steps -}}
+      <article class="sligo-step fragment">
+        <span class="sligo-step__number">{{ add $index 1 | printf "%02d" }}</span>
+        {{- if reflect.IsMap $step -}}
+          {{- with $step.title }}<h2>{{ . | markdownify | safeHTML }}</h2>{{ end -}}
+          {{- with $step.texte }}<div>{{ . | markdownify | safeHTML }}</div>{{ end -}}
+        {{- else -}}
+          <h2>{{ $step | markdownify | safeHTML }}</h2>
+        {{- end -}}
+      </article>
+    {{- end -}}
+  </div>
+
+{{- else if $slide.stat -}}
+  {{- with $slide.stat.eyebrow }}<div class="sligo-eyebrow">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  <div class="sligo-stat fragment" data-stat-value="{{ $slide.stat.value }}">
+    <strong>{{ $slide.stat.value }}</strong>
+    {{- with $slide.stat.label }}<span>{{ . | markdownify | safeHTML }}</span>{{ end -}}
+    {{- with $slide.stat.note }}<small>{{ . | markdownify | safeHTML }}</small>{{ end -}}
+  </div>
+
+{{- else if $slide.stats -}}
+  {{- with $slidetitle }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  <div class="sligo-stats">
+    {{- range $stat := $slide.stats -}}
+      <article class="sligo-stat fragment" data-stat-value="{{ $stat.value }}">
+        <strong>{{ $stat.value }}</strong>
+        {{- with $stat.label }}<span>{{ . | markdownify | safeHTML }}</span>{{ end -}}
+        {{- with $stat.note }}<small>{{ . | markdownify | safeHTML }}</small>{{ end -}}
+      </article>
+    {{- end -}}
+  </div>
+
+{{- else if $slide.statement -}}
+  {{- with $slide.statement.eyebrow }}<div class="sligo-eyebrow">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  <div class="sligo-statement">
+    <div class="sligo-statement__text">{{ $slide.statement.texte | markdownify | safeHTML }}</div>
+    {{- with $slide.statement.note }}<div class="sligo-statement__note">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+    <span class="sligo-statement__accent" aria-hidden="true">✦</span>
+  </div>
+
+{{- else if $slide.cards -}}
+  {{- with $slidetitle }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  <div class="sligo-cards">
+    {{- range $card := $slide.cards -}}
+      <article class="sligo-card fragment">
+        {{- with $card.image }}<div class="sligo-card__media">{{ partial "presentation/image" (dict "image" . "context" $context "path" $path "collection" $collection) }}</div>{{ end -}}
+        {{- with $card.title }}<h2>{{ . | markdownify | safeHTML }}</h2>{{ end -}}
+        {{- with $card.texte }}<div class="sligo-card__text">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+      </article>
+    {{- end -}}
+  </div>
+
+{{- else if $slide.code -}}
+  {{- with $slidetitle }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  <div class="sligo-code">
+    {{- with $slide.code.language }}<div class="sligo-code__language">{{ . }}</div>{{ end -}}
+    <pre><code class="language-{{ default "text" $slide.code.language }}">{{ $slide.code.content | htmlEscape }}</code></pre>
+  </div>
+
+{{- else if $slide.quiz -}}
+  {{- with $slidetitle }}<div class="sligo-recall">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  <div class="sligo-quiz" data-quiz>
+    {{- with $slide.quiz }}<h2>{{ .question | markdownify | safeHTML }}</h2>{{ end -}}
+    <div class="sligo-quiz__choices">
+      {{- range $index, $choice := $slide.quiz.choices -}}
+        <button class="sligo-quiz__choice" type="button" data-correct="{{ if $choice.correct }}true{{ else }}false{{ end }}"{{ with $choice.explanation }} data-explanation="{{ . | plainify | htmlEscape }}"{{ end }} aria-pressed="false">
+          <span class="sligo-quiz__letter">{{ add $index 1 | printf "%02d" }}</span>
+          <span>{{ $choice.text | markdownify | safeHTML }}</span>
+        </button>
+      {{- end -}}
+    </div>
+    <div class="sligo-quiz__feedback" hidden aria-live="polite"></div>
+  </div>
+
+{{- else -}}
+  {{- with $slidetitle }}<h2 class="sligo-title{{ if $slide.fit }} sligo-title--fit{{ end }}">{{ . | markdownify | safeHTML }}</h2>{{ end -}}
+  {{- with $slide.image }}<div class="sligo-media">{{ partial "presentation/image" (dict "image" . "context" $context "path" $path "collection" $collection) }}</div>{{ end -}}
+  {{- with $slide.keyboard }}
+    <div class="sligo-keyboard">
+      <h3>{{ index (split . "|") 0 }}</h3>
+      <p>{{ range $id, $key := split (index (split . "|") 1) "," }}{{ if ne $id 0 }} + {{ end }}<button class="kbc-button kbc-button-lg">{{ $key }}</button>{{ end }}</p>
+    </div>
+  {{- end -}}
+  {{- with $slide.texte }}<div class="sligo-text sligo-auto-fragments">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  {{- with $slide.focus }}<aside class="sligo-focus">{{ . | markdownify | safeHTML }}</aside>{{ end -}}
+  {{- with $slide.fragment }}<div class="fragment sligo-fragment">{{ . | markdownify | safeHTML }}</div>{{ end -}}
+  {{- with $slide.svg }}<div class="sligo-svg">{{ partial "presentation/image" (dict "image" . "context" $context "path" $path "collection" $collection) }}</div>{{ end -}}
+  {{- with $slide.html }}{{ . | safeHTML }}{{ end -}}
+{{- end -}}

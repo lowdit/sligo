@@ -1,322 +1,104 @@
 <!DOCTYPE html>
-<html class="no-js">
+<html lang="{{ .Site.Language.Lang | default "fr" }}" class="no-js">
 <head>
-    <meta charset="utf-8">
-    <title>{{ .Title }}</title>
-    <meta name="description" content="{{ .Description }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="robots" content="index">
-    <!-- Author from config -->
-    {{ with .Params.author -}}
-    <meta name="author" content="{{ . }}">
-    {{ else -}}
-    <meta name="author" content="{{ .Site.Params.author }}">
-    {{ end -}}
-    <link rel="preload" href="{{ $.Site.BaseURL | default "/" }}assets/css/fonts.css" as="style">
-    <link rel="stylesheet" href="{{ $.Site.BaseURL | default "/" }}assets/css/fonts.css"/>
-    <link rel="stylesheet" href="{{ $.Site.BaseURL | default "/" }}assets/css/keyboard.css">
-    {{ if (reflect.IsSlice .Params.slides) }}
-    <link rel="preload" href="{{ $.Site.BaseURL | default "/" }}assets/js/bigSlide.js" as="script" />
-    <script src="{{ $.Site.BaseURL | default "/" }}assets/js/bigSlide.js"></script>
-    <link rel="stylesheet" href="{{ $.Site.BaseURL | default "/" }}assets/css/simple.css">
-    {{ else }}
-    <link rel="stylesheet" href="{{ $.Site.BaseURL | default "/" }}assets/css/reveal.css">
-    {{ end }}
-    {{- $font   := resources.Get "twittercard/Roboto-Black.ttf" -}}
-    {{- $image  := cond (not ($.Resources.Get (printf "images/%s" .Params.image))) (resources.Get "twittercard/twittercard.png") ($.Resources.Get (printf "images/%s" .Params.image)) -}}
-    {{ with $image }}{{ $image = $image.Resize "3800x" }}{{ end }}
-    {{- $square := resources.Get "twittercard/twittercard-transparency.png" -}}
-    {{- $filter := images.Opacity 0.35 }}
-    {{- $square     := $square | images.Filter $filter -}}
-    {{- $square     := (images.Overlay $square 0 0)  -}}
-    {{- $image  := $image | images.Filter $square -}}
-    {{- $opts := dict
-        "color" "#ffffff"
-        "font" $font
-        "linespacing" 8
-        "size" 350
-        "x" 200
-        "y" 190
-    }}
+  <meta charset="utf-8">
+  <title>{{ .Title }}</title>
+  {{ with .Description }}<meta name="description" content="{{ . | plainify | htmlEscape }}">{{ end }}
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  {{ if eq .Params.noindex true }}
+    <meta name="robots" content="noindex, nofollow">
+  {{ else }}
+    <meta name="robots" content="index, follow">
+  {{ end }}
+  <link rel="canonical" href="{{ .Permalink }}">
 
-    {{- $text := cond (not .Params.subtitle) .Title (string (.Params.subtitle | markdownify)) }}
-    {{- $Path := .Parent.Path }}
-    {{- $filter := images.Text $text $opts }}
-    <meta property="og:title" content="{{ block "meta" . }}{{ .Title }}{{ end }}{{ with .Site.Title }} | {{ . }}{{ end }}">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="{{ .Permalink }}">
-    <meta property="og:locale" content="{{ $.Site.Language.Locale | default "fr" }}">
-    {{ with $image | images.Filter $filter }}
-    <meta property="og:image" content="{{ .Permalink }}" />
-    {{ end }}
-    <script type="module">
-        document.documentElement.classList.remove('no-js');
-        document.documentElement.classList.add('js');
-    </script>
-    <style>
-        .hide {
-            display: none !important;
-        }
-        .reveal .text-center {
-            text-align: center;
-        }
-        .reveal h2 {
-            text-shadow: 1px 1px 1px #000;
-        }
-        .reveal .sl-block {
-            display: block;
-            position: absolute;
-            z-index: auto;
-            min-width: 1px;
-            min-height: 1px;
-            pointer-events: none;
-          }
-        .reveal .sl-block .sl-block-content {
-            display: block;
-            position: relative;
-            width: 100%;
-            height: 100%;
-            max-width: none;
-            max-height: none;
-            margin: 0;
-            outline: 0;
-            word-wrap: break-word;
-            font-size: 20px;
-        }
-        reveal blockquote {
-            text-align: left;
-        }
-        .reveal .sl-block .sl-block-content > :last-child {
-            margin-bottom: 0;
-        }
-        .reveal .sl-block .sl-block-content > :first-child {
-            margin-top: 0;
-        }
+  {{ with .Params.author }}<meta name="author" content="{{ . }}">
+  {{ else }}{{ with .Params.authors }}<meta name="author" content="{{ index . 0 }}">
+  {{ else }}{{ with .Site.Params.author }}<meta name="author" content="{{ . }}">{{ end }}{{ end }}{{ end }}
 
-        .reveal h2 + ol, .reveal h2 + ul, .reveal h3 + ol, .reveal h3 + ul {
-          margin-top: 5vh;
-        }
-        .reveal .sl-block[data-block-type="line"] svg {
-            display: block;
-            vertical-align: top;
-            overflow: visible;
-            -webkit-transform: scale(0.9999999);
-            transform: scale(0.9999999);
-        }
-        section:has(data-background-color=#c61818) {
-            padding: 100rem;
-        }
-        .dark a {
-            color: #fff;
-            text-decoration: underline;
-        }
-        .backgrounds {
-            color: lime!important;
-        }
-        li {
-            max-width: 30ch;
-        }
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ .Title }}">
+  {{ with .Description }}<meta property="og:description" content="{{ . | plainify | htmlEscape }}">{{ end }}
+  <meta property="og:url" content="{{ .Permalink }}">
+  <meta property="og:locale" content="{{ $.Site.Language.Locale | default "fr_FR" }}">
+  {{ with .Params.image }}<meta property="og:image" content="{{ printf "images/%s" . | absURL }}">{{ end }}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ .Title }}">
+  {{ with .Description }}<meta name="twitter:description" content="{{ . | plainify | htmlEscape }}">{{ end }}
+  {{ with .Params.image }}<meta name="twitter:image" content="{{ printf "images/%s" . | absURL }}">{{ end }}
 
-        /* Quiz styles basiques */
-        .reveal-quiz { max-width: 60ch; margin: 2rem auto; }
-        .quiz-question h3 { margin-bottom: 1rem; }
-        .quiz-question ul {  margin: 0; padding: 0; }
-        .quiz-question li { display: flex; align-items: center; gap: 0.2em; margin: .5rem 0; }
-        .quiz-question button { width: 100%; background: #fff; }
-        .quiz-choice { padding: 1rem 1rem; font-size: 1.5rem; cursor: pointer; text-align: left;}
-        .quiz-choice.correct { background: #2b8a3e; color:#fff; }
-        .quiz-choice.wrong { background: #d64545; color:#fff; }
-        .quiz-explanation { margin:1rem auto; padding: .8rem; width: 80%; background:#111; color:#fff; border-radius:6px; }
-        .quiz-question ol li::before {
-            display: flex;
-            height: 100%;
-            aspect-ratio: 1/1;
-        }
-        h3 + hr {
-            margin: 1em 0;
-            border: none;
-        }
-        table {
-            font-size: 2rem;
-        }
-        th { 
-            background: #dedede;
-        } 
-        th:last-child { 
-            color: #fff;
-            background: #000;
-        } 
-        tr {
-            height: 80px;
-        }
-        th, td {
-            vertical-align: middle; 
-        }
-    </style>
+  <link rel="stylesheet" href="{{ "assets/css/fonts.css" | relURL }}">
+  <link rel="stylesheet" href="{{ "assets/css/keyboard.css" | relURL }}">
+
+  {{ if reflect.IsSlice .Params.slides }}
+    <link rel="stylesheet" href="{{ "assets/css/simple.css" | relURL }}">
+  {{ else }}
+    <link rel="stylesheet" href="{{ "assets/css/reveal.css" | relURL }}">
+    <link rel="stylesheet" href="{{ "assets/css/sligo.css" | relURL }}">
+  {{ end }}
+
+  <style>
+    :root {
+      --sligo-bg: {{ default "#f7f6f2" .Params.theme.background }};
+      --sligo-ink: {{ default "#151d34" .Params.theme.ink }};
+      --sligo-blue: {{ default "#164791" .Params.theme.blue }};
+      --sligo-violet: {{ default "#4631d4" .Params.theme.violet }};
+      --sligo-red: {{ default "#c61818" .Params.theme.red }};
+    }
+  </style>
 </head>
-
 <body class="light">
-    {{- $path := "" }}
-    {{- with .File }}
-        {{- $path = path.Dir .Path }}
-    {{- else }}
-        {{- $path = path.Dir .Path }}
-    {{ end -}}
-    {{- $slides     := .Params.slides }}
-    {{- $collection := union ($.Parent.Resources.ByType "image") ($.Resources.ByType "image") -}}
-    {{- if (reflect.IsSlice .Params.slides) }}
+  {{- $path := "" -}}
+  {{- with .File -}}{{- $path = path.Dir .Path -}}{{- end -}}
+  {{- $slides := .Params.slides -}}
+  {{- $collection := union ($.Parent.Resources.ByType "image") ($.Resources.ByType "image") -}}
+
+  {{ if reflect.IsSlice .Params.slides }}
     <div data-body-style="background: #222; color: #fff;">
-        {{ if .Params.subtitle }}{{ .Params.subtitle | markdownify }}{{ else }}{{ .Title }}{{ end }}
+      {{ if .Params.subtitle }}{{ .Params.subtitle | markdownify }}{{ else }}{{ .Title }}{{ end }}
     </div>
-    {{- range $key, $value := $slides }}
-    <div {{ with .part }} data-body-style="background: #164791; color: #fff;"{{ end }}{{ with .focus }} data-body-style="background: #c61818; color: #fff;"{{ end }}>
-        {{ template "slides" (dict "context" $ "value" $value "key" $key "slides" $slides "path" $path "collection" $collection) }}
-    </div>
-    {{ end -}}
-    {{- else }}
+    {{- range $key, $value := $slides -}}
+      <div {{ with .part }}data-body-style="background: {{ default "#164791" $.Params.theme.blue }}; color: #fff;"{{ end }}{{ with .focus }}data-body-style="background: {{ default "#c61818" $.Params.theme.red }}; color: #fff;"{{ end }}>
+        {{ partial "presentation/slides" (dict "context" $ "value" $value "key" $key "slides" $slides "path" $path "collection" $collection) }}
+      </div>
+    {{- end }}
+    <script defer src="{{ "assets/js/bigSlide.js" | relURL }}"></script>
+  {{ else }}
     <div class="reveal deck1">
       <div class="slides absolute">
-        <section data-background-color="#222"{{ with .Params.image }} data-background-image="{{ $Path }}/images/{{ trim . " " }}" data-background-size="100%"{{ end }}>
+        <section data-background-color="{{ default "#151d34" .Params.theme.ink }}"{{ with .Params.image }} data-background-image="{{ $path }}/images/{{ trim . " " }}"{{ end }} class="dark sligo-cover flex">
           <h1>{{ if .Params.subtitle }}{{ .Params.subtitle | markdownify }}{{ else }}{{ .Title }}{{ end }}</h1>
         </section>
-        {{ range $key, $value := $slides.content }}
-        {{- $.Scratch.Set "background" "" }}
-        {{- with .background }}
-        {{- $.Scratch.Set "background" (printf "%s%s/images/%s" $.Site.BaseURL $path (index (where (readDir (printf "content/%s/images" $path)) "Name" .) 0).Name) }}
-        {{ end -}}
-        <section
-            {{- with .part }} data-background-color="#164791"{{ end }}
-            {{- with .focus }} data-background-color="#c61818" class="dark"{{ end }}
-            {{- with .title }}{{- with (index (split . "|") 1) }} data-background-image="{{ $Path }}/images/{{ trim . " " }}" data-background-size="100%" data-background-color="#111"{{ end }}{{ end }}
-            {{- with $.Scratch.Get "background" }} data-background-image="{{ $Path }}/{{ . }}" data-background-size="60%" data-background-color="#111"{{ end }}
-            {{- with .quiz }} class="reveal-quiz" data-quiz{{ end }}
-            {{- with $value }}{{ range $key, $value := . }}{{ if eq $key "image" }} data-transition="fade"{{ end }}{{ end }}{{ end }}>
-            {{ template "slides" (dict "context" $ "value" $value "key" $key "slides" $slides "path" $path "collection" $collection) }}
-        </section>
-        {{ end }}
+        {{- $titlepart := "" }}
+        {{- range $key, $value := $slides.content -}}
+          {{- $bgColor := "" -}}
+          {{- with $value.backgroundColor }}{{ $bgColor = . }}{{ end -}}
+          {{- if not $bgColor }}
+            {{- with $value.part }}{{ $bgColor = default "#164791" $.Params.theme.blue }}{{ end -}}
+          {{- end -}}
+          {{- if not $bgColor }}
+            {{- with $value.focus }}{{ $bgColor = default "#c61818" $.Params.theme.red }}{{ end -}}
+          {{- end -}}
+          <section class="sligo-slide{{ if or $value.part $value.focus }} dark{{ end }}{{ with $value.class }} {{ . }}{{ end }}"
+            {{- with $bgColor }} data-background-color="{{ . }}"{{ end -}}
+            {{- with $value.background }} data-background-image="{{ printf "%s%s/images/%s" $.Site.BaseURL $path (trim (index (split . "|") 0) " ") }}" data-background-size="{{ default "60%" (index (split . "|") 1) }}"{{ end -}}
+            {{- with $value.transition }} data-transition="{{ . }}"{{ end -}}
+            {{- with $value.backgroundTransition }} data-background-transition="{{ . }}"{{ end -}}
+            {{- with $value.autoAnimate }} data-auto-animate="true"{{ end -}}
+          > 
+            {{- if .part }}{{ $titlepart = .part }}{{ end }}
+            {{ partial "presentation/slides" (dict "context" $ "value" $value "key" $key "slides" $slides.content "path" $path "collection" $collection "titlepart" $titlepart) }}
+          </section>
+        {{- end -}}
       </div>
     </div>
-    <link rel="preload" href="{{ $.Site.BaseURL | default "/" }}assets/js/reveal.js" as="script" />
-    <script src="{{ $.Site.BaseURL | default "/" }}assets/js/reveal.js"></script>
-    <script src="{{ $.Site.BaseURL | default "/" }}assets/js/markdown.js"></script>
-    <script src="{{ $.Site.BaseURL | default "/" }}assets/js/notes.js"></script>
-    <script src="{{ $.Site.BaseURL | default "/" }}assets/js/highlight.js"></script>
-    <script src="{{ $.Site.BaseURL | default "/" }}assets/js/reveal-quiz.js"></script>
-    <script>
-        let deck1 = new Reveal(document.querySelector('.deck1'), {
-            controls: false,
-            hash: true,
-            progress: false,
-            backgroundTransition: 'none',
-            plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
-        });
-        deck1.on('slidechanged', () => {
-            console.log('Deck 1 slide changed');
-        });
-        deck1.initialize({
-            slideNumber: true,
-            mouseWheel: true,
-            touch: true
-        });
-        
-        // Minimal quiz handler (fallback si pas de plugin)
-    function initInlineQuizzes() {
-      document.querySelectorAll('.reveal .reveal-quiz').forEach(quiz => {
-        quiz.querySelectorAll('.quiz-question').forEach(q => {
-          const choices = q.querySelectorAll('.quiz-choice');
-          choices.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-              const correct = btn.getAttribute('data-correct') === 'true';
-              btn.setAttribute('aria-pressed', 'true');
-              btn.classList.add(correct ? 'correct' : 'wrong');
-              const explanation = q.querySelector('.quiz-explanation');
-              if (explanation) explanation.classList.remove('hide');
-              choices.forEach(b => b.disabled = true);
-            });
-            // keyboard activation
-            btn.addEventListener('keydown', (e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                btn.click();
-              }
-            });
-          });
-        });
-      });
-    }
 
-    // Initialize when DOM ready & on slide change (to handle dynamic slides)
-    document.addEventListener('DOMContentLoaded', initInlineQuizzes);
-    deck1.on('ready', initInlineQuizzes);
-    deck1.on('slidechanged', initInlineQuizzes);
-    </script>
-    {{ end }}
+    <script defer src="{{ "assets/js/reveal.js" | relURL }}"></script>
+    <script defer src="{{ "assets/js/markdown.js" | relURL }}"></script>
+    <script defer src="{{ "assets/js/notes.js" | relURL }}"></script>
+    <script defer src="{{ "assets/js/highlight.js" | relURL }}"></script>
+    <script defer src="{{ "assets/js/sligo.js" | relURL }}"></script>
+  {{ end }}
 </body>
-
 </html>
-
-{{ define "slides" }}
-    {{- $key        := .key }}
-    {{- $path       := .path }}
-    {{- $slides     := .slides }}
-    {{- $value      := .value }}
-    {{- $context    := .context }}
-    {{- $collection := .collection }}
-    {{/*<p class="slide-number hide"><span class="invisible">Slide numéro</span> {{ add $key 1 }}/{{ (len $slides) }}</p>
-    <span class="progress hide" style="width: {{ div (mul (add $key 1) 100) (len $slides) }}%;"></span>
-    -->*/}}
-    {{- with $value.part }}<h1>{{ replace (index (split . "|") 0) " ?" "&nbsp;?" | markdownify | safeHTML}}</h1>{{ end }}
-    {{- with $value.title }}<h2 class="text-center">{{ replace (index (split . "|") 0) " " " " | markdownify | safeHTML }}</h2>{{ end }}
-    {{- with $value.image }}
-        {{- if and (not $collection) (fileExists (printf "content/%s/images" $path)) }}
-        {{- range $key, $value := where (readDir (printf "content/%s/images" $path)) "Name" (trim (index (split . "|") 0) " ") }}
-            <figure>
-            {{- if in .Name ".svg" }}
-                {{ readFile (printf "./content/%s/images/%s" $path .Name) | safeHTML }}
-            {{- else }}
-                <link rel="preload" as="image" href='{{ (printf "%s%s/images/%s" $context.Site.BaseURL $path .Name) }}'>
-                <img src="{{ (printf "%s%s/images/%s" $context.Site.BaseURL $path .Name) }}" alt="" class="r-stretch">
-            {{ end -}}
-            </figure>
-        {{ end -}}
-        {{- else }}
-        {{- warnf "%s doesn't exist" (printf "content/%s/images" $path) }}
-        {{- $image := ($collection.GetMatch (printf "{**/,*}%s" (trim (index (split . "|") 0) " "))) }}
-        {{- if $image }}
-            <figure>
-            {{- if in . ".svg" }}
-                {{ readFile (printf "./content/%s/%s" $path $image) | safeHTML }}
-            {{- else }}
-                <link rel="preload" as="image" href="{{ $image.Permalink }}">
-                <img src="{{ $image.Permalink }}" alt="">
-            {{ end -}}
-            {{- with (index (split . "|") 1) }}<figcaption>{{ . | markdownify }}</figcaption>{{ end }}
-            </figure>
-        {{- else }}
-            <h2>Image missing or wrong name</h2>
-        {{ end -}}
-        {{ end -}}
-    {{ end -}}
-    {{- with $value.keyboard }}<h3>{{ index (split . "|") 0 }}</h3><p>{{ range $id, $value :=  (split (index (split . "|") 1) ",") }}{{ if ne $id 0 }} + {{ end }}<button class="kbc-button kbc-button-lg">{{ . }}</button>{{ end }}</p>{{ end }}
-    {{- with $value.texte }}<p>{{ replace (. | markdownify ) "<li>" "<li class='fragment'>" | safeHTML }}</p>{{ end }}
-    {{- with $value.focus }}{{ . | markdownify | safeHTML }}{{ end }}
-    {{- with $value.html }}{{ . | safeHTML }}{{ end }}
-    {{- /* Quiz block: support single quiz or slice of quizzes */ -}}
-    {{- with $value.quiz }}
-        {{- range $i, $q := . }}
-            <div class="quiz-question" data-question-index="{{ $i }}">
-            <h3>{{ $q.question | markdownify }}</h3>
-            <ol role="list">
-                {{- range $j, $c := $q.choices }}
-                <li role="listitem">
-                    <button class="quiz-choice" data-correct="{{ cond $c.correct "true" "false" }}" aria-pressed="false">{{ $c.text }}</button>
-                </li>
-                {{- end }}
-            </ol>
-            {{- range $j, $c := $q.choices }}
-            {{ with $c.explanation }}<div class="quiz-explanation hide" aria-hidden="true">{{ . | markdownify }}</div>{{ end }}
-            {{- end }}
-            </div>
-        {{- end }}
-    {{- end }}
-{{ end -}}
