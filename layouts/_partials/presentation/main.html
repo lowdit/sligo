@@ -67,7 +67,7 @@
   {{ else }}
     <div class="reveal deck1">
       <div class="slides absolute">
-        <section data-background-color="{{ default "#151d34" .Params.theme.ink }}"{{ with .Params.image }} data-background-image="{{ $path }}/images/{{ trim . " " }}"{{ end }} class="dark sligo-cover flex">
+        <section data-background-color="{{ default "#151d34" .Params.theme.ink }}"{{ with .Params.image }} data-background-image="/{{ $path }}/images/{{ trim . " " }}"{{ end }} class="dark sligo-cover flex">
           <h1>{{ if .Params.subtitle }}{{ .Params.subtitle | markdownify }}{{ else }}{{ .Title }}{{ end }}</h1>
         </section>
         {{- $titlepart := "" }}
