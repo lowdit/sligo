@@ -1,0 +1,13 @@
+{{/* Card for a presentation page. Dict: page (Page), class (optional) */}}
+{{ $p := .page }}
+{{ $class := .class | default "card" }}
+<article class="{{ $class }} sligo-deck-card">
+  <h3><a href="{{ $p.RelPermalink }}">{{ $p.LinkTitle }}</a></h3>
+  {{ with $p.Description }}<p class="sligo-deck-card__desc">{{ . | markdownify }}</p>{{ end }}
+  {{ with $p.Params.summary }}<p class="sligo-deck-card__desc">{{ . }}</p>{{ end }}
+  <p class="sligo-deck-card__meta">
+    {{ with $p.Date }}<time datetime="{{ .Format "2006-01-02" }}">{{ .Format "2 Jan 2006" }}</time>{{ end }}
+    {{ with $p.Params.duration }} · {{ . }}{{ end }}
+    {{ with $p.Params.tags }} · {{ delimit . ", " }}{{ end }}
+  </p>
+</article>

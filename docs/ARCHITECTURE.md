@@ -160,3 +160,11 @@ Sligo ajoute seulement les traductions nécessaires : listes -> fragments, stats
 - `aria-live` pour le feedback ;
 - pas de texte injecté dans les SVG par défaut ;
 - le Markdown reste sémantique autant que possible.
+
+## Couplage Repogo (formations)
+
+Sligo couvre la **séance** (slides, `quiz` interactifs). **Repogo** couvre les **supports imprimables** d’une même formation : polycopié (`theory` / `course`), feuilles d’**exercices**, **QCM** et **sujets d’examen** (+ corrigé formateur). Identifiant commun `formation:` et rôles `theory | course | exercises | exam` — voir `repogo/docs/VISION.md` (section Formation Sligo).
+
+**Site surtout présentations** (ex. **prez-generator**) : `theme = ["sligo"]` — Sligo fait **coque + slides** (accueil cartes via `presentation/card-deck.html`), sans Minigo ni Higo. Liste section : `layout: list.decks` sur `_index.md` de section.
+
+Sites **mixtes** (cours PDF + slides, dossiers AO) : une coque (Higo / Minigo) + Sligo + Repogo empilés ; accueil souvent **hub sur mesure** — voir `lowdit-brand/docs/UNIVERS-COMPOSITION-SITES.md`.

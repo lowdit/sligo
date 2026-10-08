@@ -6,11 +6,9 @@
     <h1 class="page-header-title">{{ .Title }}</h1>
     {{ .Params.description | markdownify }}
     {{ partialCached "content.html" .Content .Content }}
-    <div class="grid center">
+    <div class="grid center sligo-deck-grid">
     {{ range where .Pages ".Params.sitemapexclude" "!=" "true" }}
-      <div class="card">
-        <h3><a href="{{ .Permalink }}">{{ .Title }}</a></h3>
-      </div>
+      {{ partial "presentation/card-deck.html" (dict "page" . "class" "card") }}
     {{ end }}
     </div>
   </section>

@@ -1,0 +1,22 @@
+{{ define "main" }}
+<div class="container--sm">
+  <section class="page-header">
+    <h1 class="page-header-title">{{ .Title }}</h1>
+    {{ with .Description }}<p class="page-header-desc">{{ . | markdownify }}</p>{{ end }}
+    {{ with .Content }}{{ partialCached "content.html" . . }}{{ end }}
+  </section>
+  {{ $pages := .RegularPages }}
+  {{ $sort := site.Params.sligo.catalog.sortBy | default "date" }}
+  {{ if eq $sort "title" }}
+    {{ $pages = $pages.ByTitle }}
+  {{ else }}
+    {{ $pages = $pages.ByDate.Reverse }}
+  {{ end }}
+  <section class="grid center sligo-deck-grid">
+    {{ range $pages }}
+      {{ partial "presentation/card-deck.html" (dict "page" .) }}
+    {{ end }}
+  </section>
+  {{ if not $pages }}<p>{{ i18n "list-empty" | default "Aucune présentation." }}</p>{{ end }}
+</div>
+{{ end }}
