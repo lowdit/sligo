@@ -1,0 +1,30 @@
+{{/* Accueil Sligo — vitrine decks (catalog) */}}
+{{- $view := partial "lowdit/resolve-view.html" . -}}
+<div class="sligo-deck-studio{{ if and $view (eq $view "deck-studio") }}{{ else }} sligo-deck-studio--plain{{ end }}">
+{{ partial "lowdit/view-styles.html" . }}
+<header class="minigo-hero minigo-hero--slides">
+  <p class="minigo-hero__eyebrow">{{ site.Params.lowdit.homeEyebrow | default "Sligo" }}</p>
+  <h1>{{ .Title }}</h1>
+  {{ with .Description }}<p class="minigo-hero__lead">{{ . }}</p>{{ end }}
+  {{ with .Content }}<div class="minigo-hero__intro">{{ . }}</div>{{ end }}
+</header>
+
+{{- $sec := site.GetPage "decks" -}}
+<section class="minigo-home-section">
+  <div class="minigo-home-section__head">
+    <h2>{{ i18n "home-decks-heading" | default "Présentations" }}</h2>
+    <p>{{ i18n "home-decks-sub" | default "Decks prêts à projeter — accessibles, sobres, mémorables." }}</p>
+  </div>
+  {{- with $sec -}}
+    {{- $pages := .RegularPages.ByDate.Reverse -}}
+    <section class="catalog-grid sligo-deck-grid">
+      {{- range $i, $p := $pages -}}
+        {{ partial "presentation/card-deck.html" (dict "page" $p "index" $i) }}
+      {{- end -}}
+    </section>
+    {{ partial "catalog/styles.html" . }}
+  {{- else -}}
+    <p>{{ i18n "list-empty" | default "Aucune présentation." }}</p>
+  {{- end -}}
+</section>
+</div>

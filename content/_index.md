@@ -1,4 +1,5 @@
 ---
+title: Sligo
 outputs:
   home:
     - html
@@ -7,3 +8,5 @@ outputs:
     - html
     - presentation
 ---
+
+Thème **Sligo** — vitrine premium : voir `exampleSite/` (`hs sligo/exampleSite` ou build depuis `sligo/exampleSite`).

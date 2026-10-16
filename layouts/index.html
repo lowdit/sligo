@@ -1,16 +1,11 @@
 {{ define "main" }}
-{{ partialCached "utils/css.html" (dict "context" . "filefolder" "object" "filename" "form") "form" }}
-{{ partialCached "utils/css.html" (dict "context" . "filefolder" "object" "filename" "card") "card" }}
-<div>
-  <section class="page-header--c">
-    <h1 class="page-header-title">{{ .Title }}</h1>
-    {{ .Params.description | markdownify }}
-    {{ partialCached "content.html" .Content .Content }}
-    <div class="grid center sligo-deck-grid">
-    {{ range where .Pages ".Params.sitemapexclude" "!=" "true" }}
-      {{ partial "presentation/card-deck.html" (dict "page" . "class" "card") }}
-    {{ end }}
-    </div>
-  </section>
-</div>
+  {{- if templates.Exists "partials/lowdit/resolve-view.html" -}}
+    {{ partial "home/slides-showcase.html" . }}
+  {{- else -}}
+    <article class="sligo-home-stub">
+      <h1>{{ .Title }}</h1>
+      {{ with .Description }}<p>{{ . }}</p>{{ end }}
+      <div>{{ .Content }}</div>
+    </article>
+  {{- end -}}
 {{ end }}

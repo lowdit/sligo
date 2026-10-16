@@ -33,5 +33,5 @@ removePathAccents = true
 [[cascade]]
   _merge = 'deep'
   outputs = ['presentation']
-  [cascade._target]
+  [cascade.target]
     path = '/publication/**'

@@ -1,13 +1,22 @@
-{{/* Card for a presentation page. Dict: page (Page), class (optional) */}}
-{{ $p := .page }}
-{{ $class := .class | default "card" }}
-<article class="{{ $class }} sligo-deck-card">
-  <h3><a href="{{ $p.RelPermalink }}">{{ $p.LinkTitle }}</a></h3>
-  {{ with $p.Description }}<p class="sligo-deck-card__desc">{{ . | markdownify }}</p>{{ end }}
-  {{ with $p.Params.summary }}<p class="sligo-deck-card__desc">{{ . }}</p>{{ end }}
-  <p class="sligo-deck-card__meta">
-    {{ with $p.Date }}<time datetime="{{ .Format "2006-01-02" }}">{{ .Format "2 Jan 2006" }}</time>{{ end }}
-    {{ with $p.Params.duration }} · {{ . }}{{ end }}
-    {{ with $p.Params.tags }} · {{ delimit . ", " }}{{ end }}
-  </p>
+{{/* Dict: page, index (optional) */}}
+{{- $p := .page -}}
+{{- $idx := int (default 0 .index) -}}
+{{- $art := partial "catalog/visual-art.html" (dict "key" $p.RelPermalink "index" $idx "accent" ($p.Params.accent | default "")) -}}
+{{- $motif := "SLIDE" -}}
+{{- with $p.Params.tags -}}
+  {{- if gt (len .) 0 -}}{{- $motif = upper (index . 0) -}}{{- end -}}
+{{- end -}}
+{{- $label := upper (substr ($p.File.ContentBaseName | default "P") 0 2) -}}
+<article class="catalog-card sligo-deck-card">
+  <a class="catalog-card__link" href="{{ $p.RelPermalink }}">
+    {{ partial "catalog/card-visual.html" (dict "art" $art "motif" $motif "label" $label "thumbnail" $p.Params.thumbnail) }}
+    <div class="catalog-card__body">
+      <h3 class="catalog-card__title">{{ $p.LinkTitle }}</h3>
+      {{- with $p.Description -}}<p class="catalog-card__meta">{{ . | markdownify }}</p>{{- end -}}
+      <p class="catalog-card__sub">
+        {{- with $p.Date -}}<time datetime="{{ .Format "2006-01-02" }}">{{ .Format "2 Jan 2006" }}</time>{{- end -}}
+        {{- with $p.Params.duration -}} · {{ . }}{{ end -}}
+      </p>
+    </div>
+  </a>
 </article>
