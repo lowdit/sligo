@@ -1,0 +1,29 @@
+{{- define "title" -}}{{ .Title }}{{- end -}}
+{{- define "main" -}}
+{{ partial "utils/css.html" (dict "context" . "filefolder" "object" "filename" "publication") }}
+<section class="page-header">
+  <h1 class="page-header-title">{{ .Title }}</h1>
+  {{- with .Content }}<div class="page-header-desc">{{ . }}</div>{{ end }}
+</section>
+
+{{- $role := .File.ContentBaseName -}}
+{{- $matches := where .Site.RegularPages "Params.roles" "intersect" (slice $role) -}}
+{{- if $matches }}
+<div class="publication-grid">
+  {{- range $matches }}
+  <article class="publication-card">
+    <a class="publication-card__link" href="{{ .RelPermalink }}">
+      <h3>{{ .Title }}</h3>
+      {{- with .Description }}<p>{{ . }}</p>{{ end -}}
+    </a>
+    <p class="publication-card__meta">
+      {{- with .Params.kind }}{{ i18n (printf "publication-kind-%s" .) | default . }} · {{ end -}}
+      {{- with .Date }}{{ . | time.Format ":date_short" }}{{ end -}}
+    </p>
+  </article>
+  {{- end }}
+</div>
+{{- else }}
+<p class="publication-empty">{{ i18n "roles-empty" }}</p>
+{{- end }}
+{{- end -}}

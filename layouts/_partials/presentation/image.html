@@ -27,6 +27,15 @@
       {{- with $caption }}<figcaption>{{ . | markdownify | safeHTML }}</figcaption>{{ end -}}
     </figure>
   {{- else -}}
-    <p class="sligo-missing">Image missing: {{ $name }}</p>
+    {{- $shared := resources.Get (printf "images/demo/%s" $name) -}}
+    {{- if $shared -}}
+      {{- if strings.HasSuffix $name ".svg" -}}
+        {{- $shared.Content | safeHTML -}}
+      {{- else -}}
+        <img src="{{ $shared.RelPermalink }}" alt="" class="sligo-image" loading="eager" decoding="async">
+      {{- end -}}
+    {{- else -}}
+      <p class="sligo-missing">Image missing: {{ $name }}</p>
+    {{- end -}}
   {{- end -}}
 {{- end -}}

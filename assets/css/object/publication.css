@@ -1,0 +1,202 @@
+/* Sligo — Publications : une source → plusieurs vues (synthèse, rapport, livre, deck).
+   Feuille autonome, chargée par layouts/publication/*.html et layouts/roles/*.html. */
+
+/* --- Vue article (single) --- */
+
+.publication {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 3rem);
+}
+
+.publication__hero {
+  margin-block: clamp(2rem, 6vh, 4rem) clamp(1.5rem, 4vh, 3rem);
+  max-width: 68ch;
+}
+
+.publication__eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  font-size: .8rem;
+  font-weight: 700;
+  color: #4631d4;
+}
+
+.publication__hero h1 {
+  margin: .25em 0 .35em;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.05;
+}
+
+.publication__subtitle {
+  margin: 0 0 .8em;
+  font-size: clamp(1.05rem, 2vw, 1.35rem);
+  line-height: 1.35;
+  color: #657083;
+}
+
+.publication__meta {
+  margin: 0;
+  color: #657083;
+  font-size: .9rem;
+}
+
+.publication__actions { margin-block: 1.4rem 0; }
+
+.publication__deck {
+  display: inline-block;
+  padding: .55em 1.3em;
+  border: 2px solid #4631d4;
+  border-radius: 999px;
+  color: #4631d4;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.publication__deck:hover,
+.publication__deck:focus-visible {
+  background: #4631d4;
+  color: #fff;
+}
+
+/* À retenir (synthèse) */
+
+.publication__points {
+  margin-block: 2rem;
+  padding: 1.4rem 1.6rem;
+  border: 2px solid #151d34;
+  background: #f7f6f2;
+  max-width: 68ch;
+}
+
+.publication__points h2 {
+  margin: 0;
+  font-size: .85rem;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+}
+
+.publication__points ul {
+  margin: .7rem 0 0;
+  padding-left: 1.2rem;
+}
+
+.publication__points li { margin-block: .35em; }
+
+/* Corps, rapport, livre */
+
+.publication__body {
+  max-width: 68ch;
+  margin-block: 1.5rem 3rem;
+}
+
+.publication--livre .publication__body {
+  max-width: 62ch;
+  font-size: 1.06rem;
+  line-height: 1.65;
+}
+
+.publication--livre .publication__body h2 { margin-top: 2.2em; }
+
+/* Ressources et rôles */
+
+.publication__resources {
+  max-width: 68ch;
+  margin-block: 3rem;
+  padding-top: 1.4rem;
+  border-top: 2px solid #151d34;
+}
+
+.publication__resources h2 { font-size: 1.1rem; }
+
+.publication__roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-block: 2rem 4rem;
+}
+
+.publication__role {
+  padding: .3em 1em;
+  border-radius: 999px;
+  background: #edeaff;
+  color: #4631d4;
+  font-size: .85rem;
+  text-decoration: none;
+}
+
+.publication__role:hover,
+.publication__role:focus-visible {
+  background: #4631d4;
+  color: #fff;
+}
+
+/* --- Listes (index publications, rôles) --- */
+
+.publication-group {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 3rem);
+}
+
+.publication-group h2 {
+  margin-block: 2rem .5rem;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+.publication-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 1.25rem;
+  margin-block: 1rem 3rem;
+}
+
+.publication-card {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  padding: 1.25rem;
+  border: 1px solid rgb(21 29 52 / .15);
+  box-shadow: 0 .2rem .8rem rgb(21 29 52 / .05);
+}
+
+.publication-card__link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.publication-card__link:hover h3,
+.publication-card__link:focus-visible h3 { text-decoration: underline; }
+
+.publication-card__link h3 { margin: 0 0 .25em; }
+
+.publication-card__link p { margin: 0; color: #657083; }
+
+.publication-card__meta {
+  margin-block-start: auto;
+  color: #657083;
+  font-size: .85rem;
+}
+
+.publication-card__deck {
+  font-weight: 700;
+  text-decoration-thickness: 2px;
+  text-underline-offset: .2em;
+}
+
+.publication-empty {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 3rem);
+  color: #657083;
+}
+
+/* Livre — impression : un chapitre par page. */
+@media print {
+  .publication--livre .publication__body h2 { break-before: page; }
+  .publication__points,
+  .publication__resources { break-inside: avoid; }
+}

@@ -25,13 +25,17 @@ removePathAccents = true
 
 [outputFormats.presentation]
   baseName = "presentation"
+  isHTML = true
   mediaType = "text/html"
   notAlternative = false
   permalinkable = true
-  isHTML = true
 
 [[cascade]]
   _merge = 'deep'
-  outputs = ['presentation']
+  # Une publication = un source → deux vues (article HTML + deck).
+  # NB : Hugo n'applique pas la cascade déclarée dans la config d'un thème/module ;
+  # les sites consommateurs la déclarent aussi dans leur propre config
+  # (voir docs/PUBLICATIONS.md § 5).
+  outputs = ['HTML', 'presentation']
   [cascade.target]
     path = '/publication/**'

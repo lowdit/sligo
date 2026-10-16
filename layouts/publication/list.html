@@ -1,0 +1,35 @@
+{{- define "title" -}}{{ .Title }}{{- end -}}
+{{- define "main" -}}
+{{ partial "utils/css.html" (dict "context" . "filefolder" "object" "filename" "publication") }}
+<section class="page-header">
+  <h1 class="page-header-title">{{ .Title }}</h1>
+  {{- with .Content }}<div class="page-header-desc">{{ . }}</div>{{ end }}
+</section>
+
+{{- range $k := slice "synthese" "rapport" "livre" }}
+{{- $group := where $.Pages "Params.kind" $k }}
+{{- with $group }}
+<section class="publication-group">
+  <h2>{{ i18n (printf "publication-kind-%s" $k) }}</h2>
+  <div class="publication-grid">
+    {{- range . }}
+    {{- $slides := .Params.slides | default dict }}
+    <article class="publication-card">
+      <a class="publication-card__link" href="{{ .RelPermalink }}">
+        <h3>{{ .Title }}</h3>
+        {{- with .Description }}<p>{{ . }}</p>{{ end -}}
+      </a>
+      <p class="publication-card__meta">
+        {{- with .Params.roles }}{{ delimit . " · " }} · {{ end -}}
+        {{- with .Date }}{{ . | time.Format ":date_short" }}{{ end -}}
+      </p>
+      {{- if or (reflect.IsSlice $slides) (gt (len $slides) 0) }}
+      {{- with .OutputFormats.Get "presentation" }}<a class="publication-card__deck" href="{{ .RelPermalink }}">{{ i18n "publication-view-deck" }}</a>{{ end }}
+      {{- end }}
+    </article>
+    {{- end }}
+  </div>
+</section>
+{{- end }}
+{{- end }}
+{{- end -}}

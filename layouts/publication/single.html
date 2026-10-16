@@ -1,0 +1,58 @@
+{{- define "title" -}}{{ .Title }}{{- end -}}
+{{- define "main" -}}
+{{ partial "utils/css.html" (dict "context" . "filefolder" "object" "filename" "publication") }}
+{{- $kind := default "rapport" .Params.kind -}}
+{{- $deck := .OutputFormats.Get "presentation" -}}
+{{- $slides := .Params.slides | default dict -}}
+{{- $hasSlides := or (reflect.IsSlice $slides) (gt (len $slides) 0) -}}
+
+<article class="publication publication--{{ $kind }}">
+  <header class="publication__hero">
+    <p class="publication__eyebrow">{{ i18n (printf "publication-kind-%s" $kind) | default $kind }}</p>
+    <h1>{{ .Title }}</h1>
+    {{- with .Params.subtitle }}
+    <p class="publication__subtitle">{{ . }}</p>
+    {{- end }}
+    <p class="publication__meta">
+      {{- with .Params.authors }}<span>{{ if reflect.IsSlice . }}{{ delimit . ", " }}{{ else }}{{ . }}</span> · {{ end }}{{ end -}}
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date | time.Format ":date_long" }}</time>
+      · {{ partial "elements/time-to-read.html" . }}
+    </p>
+    {{- if and $deck $hasSlides }}
+    <p class="publication__actions"><a class="publication__deck" href="{{ $deck.RelPermalink }}">{{ i18n "publication-view-deck" }}</a></p>
+    {{- end }}
+  </header>
+
+  {{- if eq $kind "synthese" }}
+  {{- with .Params.points }}
+  <aside class="publication__points">
+    <h2>{{ i18n "publication-points" }}</h2>
+    <ul>{{ range . }}<li>{{ . | markdownify }}</li>{{ end }}</ul>
+  </aside>
+  {{- end }}
+  {{- end }}
+
+  {{- if in (slice "rapport" "livre") $kind }}
+  {{ partial "elements/tableofcontent.html" . }}
+  {{- end }}
+
+  <div class="publication__body">{{ .Content }}</div>
+
+  {{- with .Params.resources }}
+  <footer class="publication__resources">
+    <h2>{{ i18n "publication-resources" }}</h2>
+    <ul>
+      {{- range . }}
+      <li><a href="{{ .url }}">{{ .title }}</a>{{ with .note }} — <em>{{ . }}</em>{{ end }}</li>
+      {{- end }}
+    </ul>
+  </footer>
+  {{- end }}
+
+  {{- with .Params.roles }}
+  <nav class="publication__roles" aria-label="{{ i18n "publication-roles" }}">
+    {{- range . }}<a class="publication__role" href="{{ printf "roles/%s/" . | relURL }}">{{ . }}</a>{{ end }}
+  </nav>
+  {{- end }}
+</article>
+{{- end -}}

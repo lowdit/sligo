@@ -94,3 +94,19 @@ contact-us:
   other: Page not found
 404-button:
   other: Back to home
+publication-kind-synthese:
+  other: "Summary"
+publication-kind-rapport:
+  other: "Report · analysis"
+publication-kind-livre:
+  other: "Book"
+publication-view-deck:
+  other: "Open the slides"
+publication-points:
+  other: "Key takeaways"
+publication-resources:
+  other: "Resources"
+publication-roles:
+  other: "Roles"
+roles-empty:
+  other: "No content indexed for this role yet."

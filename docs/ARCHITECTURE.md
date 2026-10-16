@@ -168,3 +168,11 @@ Sligo couvre la **séance** (slides, `quiz` interactifs). **Repogo** couvre les 
 **Site surtout présentations** (ex. **prez-generator**) : `theme = ["sligo"]` — Sligo fait **coque + slides** (accueil cartes via `presentation/card-deck.html`), sans Minigo ni Higo. Liste section : `layout: list.decks` sur `_index.md` de section.
 
 Sites **mixtes** (cours PDF + slides, dossiers AO) : une coque (Higo / Minigo) + Sligo + Repogo empilés ; accueil souvent **hub sur mesure** — voir `lowdit-brand/docs/UNIVERS-COMPOSITION-SITES.md`.
+
+## Publications et déclinaisons
+
+Sligo embarque un module **Publications** : une source → plusieurs vues (synthèse, rapport, livre, deck lié), étiquetées par **rôles** (`conférencier`, `professeur`, `freelance`, `référent accessibilité`) — layouts `publication/` et `roles/`, styles `css/object/publication.css`, archétype `publication.md`.
+
+Pour les slides, deux clés de front matter suffisent : **`colorway`** (palettes prêtes à l'emploi : `nuit`, `vin`, `encre`, `sauge`, `papier`) et **`font`** (fontes d'affichage : `optician`, `subjectivity`, `bungee`). La couverture accepte un badge (`authors` + `event` + `date`).
+
+Détail complet, contraintes de configuration (cascade, résolution module) : voir `docs/PUBLICATIONS.md`.

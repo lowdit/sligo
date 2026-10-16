@@ -42,3 +42,28 @@
 	font-family: "Virgil";
 	src: url("./../fonts/virgil/virgil.woff2");
 }
+
+/* Fontes d'affichage — déclinaisons Sligo (front matter : font: optician | subjectivity | bungee). */
+@font-face {
+	font-family: 'Optiker-K';
+	src: url('./../fonts/optician/optiker-k.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Subjectivity Serif';
+	src: url('./../fonts/subjectivity/subjectivity-black.woff2') format('woff2');
+	font-weight: 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Bungee';
+	src: url('./../fonts/bungee/bungee.woff2') format('woff2');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}

@@ -1,0 +1,56 @@
+{{- /*
+	Palettes de deck prêtes à l'emploi — déclinaisons de la marque Sligo.
+
+	Usage front matter : colorway: nuit
+	Un `theme:` explicite reste prioritaire sur le colorway clé par clé.
+
+	Tokens : background (fond), ink (texte), muted (secondaire), line (filets),
+	blue (slides part), red (slides focus), violet (accent/lien), cover (fond de couverture).
+*/ -}}
+{{- return dict
+	"nuit" (dict
+		"background" "#050e46"
+		"ink" "#cdd9f8"
+		"muted" "#8ea3d8"
+		"line" "rgb(205 217 248 / .18)"
+		"blue" "#12246e"
+		"violet" "#8fa8e8"
+		"red" "#b4304d"
+		"cover" "#020a30")
+	"vin" (dict
+		"background" "#7a1550"
+		"ink" "#f5cf00"
+		"muted" "#e2a9c8"
+		"line" "rgb(245 207 0 / .25)"
+		"blue" "#5c0f3c"
+		"violet" "#ffd84d"
+		"red" "#ff5d5d"
+		"cover" "#5c0f3c")
+	"encre" (dict
+		"background" "#0b0b12"
+		"ink" "#f2f3f8"
+		"muted" "#9aa0b5"
+		"line" "rgb(242 243 248 / .16)"
+		"blue" "#1c1c2e"
+		"violet" "#e8c030"
+		"red" "#ff6b6b"
+		"cover" "#05050a")
+	"sauge" (dict
+		"background" "#eef3ea"
+		"ink" "#1d3418"
+		"muted" "#5d6e57"
+		"line" "rgb(29 52 24 / .16)"
+		"blue" "#24523a"
+		"violet" "#3e7a46"
+		"red" "#c61818"
+		"cover" "#1d3418")
+	"papier" (dict
+		"background" "#f7f6f2"
+		"ink" "#151d34"
+		"muted" "#657083"
+		"line" "rgb(21 29 52 / .14)"
+		"blue" "#164791"
+		"violet" "#4631d4"
+		"red" "#c61818"
+		"cover" "#151d34")
+-}}

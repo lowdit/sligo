@@ -343,3 +343,44 @@
   .sligo-radial__item { width: 8rem; min-height: 8rem; padding: .7rem; }
   .sligo-action-map { grid-template-columns: 1fr; }
 }
+
+/* ZONE D'OVERRIDES — hors layers, chargeur du thème.
+   Déclinaisons : fontes d'affichage (`font:` en front matter) et badge de couverture. */
+
+body[class*="sligo-display-"] .sligo-cover h1,
+body[class*="sligo-display-"] .sligo-part h1,
+body[class*="sligo-display-"] .sligo-part h2,
+body[class*="sligo-display-"] .sligo-statement__text,
+body[class*="sligo-display-"] .sligo-stat strong,
+body[class*="sligo-display-"] .sligo-title--fit {
+  font-family: var(--sligo-display-font, inherit);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.02;
+}
+
+.sligo-cover { position: relative; }
+
+/* Badge identitaire de couverture — orateur · événement · date. */
+.sligo-cover__badge {
+  position: absolute;
+  right: clamp(1.5rem, 6vw, 5rem);
+  bottom: clamp(1.5rem, 7vh, 4.5rem);
+  min-width: 11.5rem;
+  padding: 1.6rem 1.2rem;
+  display: grid;
+  gap: .25rem;
+  place-content: center;
+  justify-items: center;
+  text-align: center;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  background: rgb(255 255 255 / .08);
+  border: 1px solid rgb(255 255 255 / .3);
+}
+.sligo-cover__badge strong { font-size: .72rem; line-height: 1.15; max-width: 14ch; }
+.sligo-cover__badge span { font-size: .58rem; opacity: .85; line-height: 1.15; }
+@media (max-width: 900px) {
+  .sligo-cover__badge { position: static; margin-top: 2rem; }
+  .sligo-cover { align-content: center; }
+}

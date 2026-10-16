@@ -1,0 +1,46 @@
+baseURL = ""
+title = "Sligo"
+defaultContentLanguage = "fr"
+
+# Dev/`hugo server` : thèmes résolus en local via `themes/` (symlinks).
+# La prod utilise `config/production/hugo.toml` (modules GitHub).
+theme = ["minigo", "sligo"]
+
+[params.lowdit]
+  logo = "logos/sligo.png"
+  faviconDir = "favicons/sligo"
+  siteProfile = "presentations"
+  view = "deck-studio"
+  homeEyebrow = "Présentations · studio"
+
+[[menus.main]]
+  name = "Accueil"
+  url = "/"
+  weight = 1
+[[menus.main]]
+  name = "Installation"
+  url = "/installation/"
+  weight = 2
+[[menus.main]]
+  name = "Decks"
+  url = "/decks/"
+  weight = 3
+[[menus.main]]
+  name = "Publications"
+  url = "/publication/"
+  weight = 4
+[[menus.main]]
+  name = "Rôles"
+  url = "/roles/"
+  weight = 5
+
+# Publications : une source → deux vues (article HTML + deck).
+# La cascade au niveau du thème n'est pas lue par Hugo : elle se déclare ici,
+# dans la config du site qui utilise Sligo.
+[[cascade]]
+  outputs = ["HTML", "presentation"]
+  [cascade.target]
+    path = "/publication/**"
+
+[markup.goldmark.renderer]
+  unsafe = true

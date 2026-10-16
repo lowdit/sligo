@@ -44,17 +44,32 @@
     <link rel="stylesheet" href="{{ "assets/css/sligo.css" | relURL }}">
   {{ end }}
 
+  {{- /* Colorway (préréglage) puis `theme:` explicite, clé par clé. */ -}}
+  {{- $preset := dict -}}
+  {{- with .Params.colorway -}}
+    {{- with index (partial "presentation/colorways.html" .) . -}}{{- $preset = . -}}{{- end -}}
+  {{- end -}}
+  {{- $t := .Params.theme | default dict -}}
+  {{- $fonts := partial "presentation/display-fonts.html" . -}}
+  {{- $display := index $fonts (default "" .Params.font) | default "inherit" -}}
+  {{- $blue := or $t.blue (index $preset "blue") "#164791" -}}
+  {{- $violet := or $t.violet (index $preset "violet") "#4631d4" -}}
+  {{- $red := or $t.red (index $preset "red") "#c61818" -}}
   <style>
     :root {
-      --sligo-bg: {{ default "#f7f6f2" .Params.theme.background }};
-      --sligo-ink: {{ default "#151d34" .Params.theme.ink }};
-      --sligo-blue: {{ default "#164791" .Params.theme.blue }};
-      --sligo-violet: {{ default "#4631d4" .Params.theme.violet }};
-      --sligo-red: {{ default "#c61818" .Params.theme.red }};
+      --sligo-bg: {{ or $t.background (index $preset "background") "#f7f6f2" }};
+      --sligo-ink: {{ or $t.ink (index $preset "ink") "#151d34" }};
+      --sligo-blue: {{ $blue | safeCSS }};
+      --sligo-violet: {{ $violet | safeCSS }};
+      --sligo-red: {{ $red | safeCSS }};
+      --sligo-muted: {{ or $t.muted (index $preset "muted") "#657083" }};
+      --sligo-line: {{ or $t.line (index $preset "line") "rgb(21 29 52 / .14)" | safeCSS }};
+      --sligo-display-font: {{ $display }};
+      --sligo-cover: {{ or $t.cover (index $preset "cover") (or $t.ink "#151d34") }};
     }
   </style>
 </head>
-<body class="light">
+<body class="light{{ with .Params.font }} sligo-display-{{ . }}{{ end }}">
   {{- $path := "" -}}
   {{- with .File -}}{{- $path = path.Dir .Path -}}{{- end -}}
   {{- $slides := .Params.slides -}}
@@ -65,7 +80,7 @@
       {{ if .Params.subtitle }}{{ .Params.subtitle | markdownify }}{{ else }}{{ .Title }}{{ end }}
     </div>
     {{- range $key, $value := $slides -}}
-      <div {{ with .part }}data-body-style="background: {{ default "#164791" $.Params.theme.blue }}; color: #fff;"{{ end }}{{ with .focus }}data-body-style="background: {{ default "#c61818" $.Params.theme.red }}; color: #fff;"{{ end }}>
+      <div {{ with .part }}data-body-style="background: {{ $blue | safeCSS }}; color: #fff;"{{ end }}{{ with .focus }}data-body-style="background: {{ $red | safeCSS }}; color: #fff;"{{ end }}>
         {{ partial "presentation/slides" (dict "context" $ "value" $value "key" $key "slides" $slides "path" $path "collection" $collection) }}
       </div>
     {{- end }}
@@ -73,18 +88,25 @@
   {{ else }}
     <div class="reveal deck1">
       <div class="slides absolute">
-        <section data-background-color="{{ default "#151d34" .Params.theme.ink }}"{{ with .Params.image }} data-background-image="/{{ $path }}/images/{{ trim . " " }}"{{ end }} class="dark sligo-cover flex">
+        <section data-background-color="{{ or $t.cover (index $preset "cover") (default "#151d34" .Params.theme.ink) }}"{{ with .Params.image }} data-background-image="/{{ $path }}/images/{{ trim . " " }}"{{ end }} class="dark sligo-cover flex">
           <h1>{{ if .Params.subtitle }}{{ .Params.subtitle | markdownify }}{{ else }}{{ .Title }}{{ end }}</h1>
+          {{- if or .Params.event .Params.date }}
+          <div class="sligo-cover__badge">
+            {{- with .Params.authors }}<strong>{{ if reflect.IsSlice . }}{{ index . 0 }}{{ else }}{{ . }}{{ end }}</strong>{{ end -}}
+            {{- with .Params.event }}<span>{{ . }}</span>{{ end -}}
+            {{- with .Params.date }}<span>{{ dateFormat "02 · 01 · 2006" . }}</span>{{ end -}}
+          </div>
+          {{- end }}
         </section>
         {{- $titlepart := "" }}
         {{- range $key, $value := $slides.content -}}
           {{- $bgColor := "" -}}
           {{- with $value.backgroundColor }}{{ $bgColor = . }}{{ end -}}
           {{- if not $bgColor }}
-            {{- with $value.part }}{{ $bgColor = default "#164791" $.Params.theme.blue }}{{ end -}}
+            {{- with $value.part }}{{ $bgColor = $blue }}{{ end -}}
           {{- end -}}
           {{- if not $bgColor }}
-            {{- with $value.focus }}{{ $bgColor = default "#c61818" $.Params.theme.red }}{{ end -}}
+            {{- with $value.focus }}{{ $bgColor = $red }}{{ end -}}
           {{- end -}}
           <section class="sligo-slide{{ if or $value.part $value.focus }} dark{{ end }}{{ with $value.class }} {{ . }}{{ end }}"
             {{- with $bgColor }} data-background-color="{{ . }}"{{ end -}}
