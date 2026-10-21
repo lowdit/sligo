@@ -108,6 +108,12 @@ publication-kind-rapport:
   other: "Rapport · analyse"
 publication-kind-livre:
   other: "Livre"
+publication-kind-lead-synthese:
+  other: "Vue courte — l’essentiel à partager avant d’ouvrir le rapport ou le deck."
+publication-kind-lead-rapport:
+  other: "Analyse détaillée, même source que la synthèse — format long à lire ou imprimer."
+publication-kind-lead-livre:
+  other: "Chapitrage et rythme de lecture — même fil éditorial, posture « livre »."
 publication-view-deck:
   other: "Ouvrir les slides"
 publication-points:

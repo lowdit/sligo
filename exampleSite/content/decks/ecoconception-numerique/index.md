@@ -2,12 +2,15 @@
 title: "Écoconception des services numériques"
 subtitle: "Concevoir plus sobre, sans sacrifier l'usage"
 type: presentation
+colorway: encre
+font: optician
 image: demo-2.svg
 description: |-
     Comprendre les impacts du numérique et déployer une démarche d'écoconception concrète.
 authors:
     - Noé Barbier
 slides:
+  content:
     - title: "Pourquoi en parler ?"
       texte: |-
         **Le numérique n'est pas immatériel :**
@@ -35,7 +38,6 @@ slides:
     - title: "Les grands leviers"
       cards:
         - title: "Utilité"
-          image: demo-4.svg
           texte: "Questionner le besoin avant d'ajouter une fonctionnalité."
         - title: "Sobriété"
           texte: "Limiter le poids, les requêtes et les données transférées."

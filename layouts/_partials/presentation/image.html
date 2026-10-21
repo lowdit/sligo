@@ -8,31 +8,34 @@
 {{- if gt (len $parts) 1 }}{{ $caption = trim (index $parts 1) " " }}{{ end -}}
 
 {{- with ($collection.GetMatch (printf "{**/,*}%s" $name)) -}}
+  {{- $res := . -}}
+  {{- if strings.HasSuffix $res.Name ".svg" -}}
+    <figure class="sligo-figure sligo-figure--svg">{{ $res.Content | safeHTML }}</figure>
+  {{- else -}}
   <figure class="sligo-figure">
-    {{- if strings.HasSuffix .Name ".svg" -}}
-      {{ readFile (printf "./content/%s/%s" $path .Name) | safeHTML }}
-    {{- else -}}
-      <img src="{{ .RelPermalink }}" alt="" class="sligo-image" loading="eager" decoding="async">
-    {{- end -}}
+    <img src="{{ $res.RelPermalink }}" alt="" class="sligo-image" loading="eager" decoding="async">
     {{- with $caption }}<figcaption>{{ . | markdownify | safeHTML }}</figcaption>{{ end -}}
   </figure>
+  {{- end -}}
 {{- else -}}
   {{- if and (not $collection) (fileExists (printf "content/%s/images/%s" $path $name)) -}}
+    {{- if strings.HasSuffix $name ".svg" -}}
+      <figure class="sligo-figure sligo-figure--svg">{{ readFile (printf "content/%s/images/%s" $path $name) | safeHTML }}</figure>
+    {{- else -}}
     <figure class="sligo-figure">
-      {{- if strings.HasSuffix $name ".svg" -}}
-        {{ readFile (printf "./content/%s/images/%s" $path $name) | safeHTML }}
-      {{- else -}}
-        <img src="{{ printf "%s%s/images/%s" $context.Site.BaseURL $path $name }}" alt="" class="sligo-image" loading="eager" decoding="async">
-      {{- end -}}
+      <img src="{{ printf "%s%s/images/%s" $context.Site.BaseURL $path $name }}" alt="" class="sligo-image" loading="eager" decoding="async">
       {{- with $caption }}<figcaption>{{ . | markdownify | safeHTML }}</figcaption>{{ end -}}
     </figure>
+    {{- end -}}
   {{- else -}}
     {{- $shared := resources.Get (printf "images/demo/%s" $name) -}}
     {{- if $shared -}}
       {{- if strings.HasSuffix $name ".svg" -}}
-        {{- $shared.Content | safeHTML -}}
+        <figure class="sligo-figure sligo-figure--svg">{{ $shared.Content | safeHTML }}</figure>
       {{- else -}}
+      <figure class="sligo-figure">
         <img src="{{ $shared.RelPermalink }}" alt="" class="sligo-image" loading="eager" decoding="async">
+      </figure>
       {{- end -}}
     {{- else -}}
       <p class="sligo-missing">Image missing: {{ $name }}</p>

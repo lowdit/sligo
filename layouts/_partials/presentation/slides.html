@@ -143,7 +143,12 @@
   <div class="sligo-cards">
     {{- range $card := $slide.cards -}}
       <article class="sligo-card fragment">
-        {{- with $card.image }}<div class="sligo-card__media">{{ partial "presentation/image" (dict "image" . "context" $context "path" $path "collection" $collection) }}</div>{{ end -}}
+        {{- with $card.image -}}
+          {{- $imgName := trim (index (split . "|") 0) " " -}}
+          {{- if not (strings.HasSuffix (lower $imgName) ".svg") -}}
+        <div class="sligo-card__media">{{ partial "presentation/image" (dict "image" . "context" $context "path" $path "collection" $collection) }}</div>
+          {{- end -}}
+        {{- end -}}
         {{- with $card.title }}<h2>{{ . | markdownify | safeHTML }}</h2>{{ end -}}
         {{- with $card.texte }}<div class="sligo-card__text">{{ . | markdownify | safeHTML }}</div>{{ end -}}
       </article>

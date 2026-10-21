@@ -100,6 +100,12 @@ publication-kind-rapport:
   other: "Report · analysis"
 publication-kind-livre:
   other: "Book"
+publication-kind-lead-synthese:
+  other: "Short view — key points before opening the full report or deck."
+publication-kind-lead-rapport:
+  other: "In-depth analysis from the same source — long-form reading or print."
+publication-kind-lead-livre:
+  other: "Chaptered reading rhythm — same editorial line, book posture."
 publication-view-deck:
   other: "Open the slides"
 publication-points:

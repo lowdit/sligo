@@ -2,12 +2,15 @@
 title: "Design system et recherche utilisateur"
 subtitle: "Outiller la cohérence, éclairer les décisions"
 type: presentation
+colorway: sauge
+font: bungee
 image: demo-4.svg
 description: |-
     Comment articuler un design system et une démarche de recherche utilisateur dans un même projet.
 authors:
     - Théo Marchand
 slides:
+  content:
     - title: "Deux démarches, un même cap"
       texte: |-
         **Un design system sans recherche est aveugle. Une recherche sans design system se perd.**
@@ -24,7 +27,6 @@ slides:
         - title: "Fondations"
           texte: "Couleurs, typographies, espacements, iconographie."
         - title: "Composants"
-          image: demo-2.svg
           texte: "Boutons, formulaires, navigation, messages d'erreur."
         - title: "Règles"
           texte: "Bonnes pratiques et critères d'usage des composants."

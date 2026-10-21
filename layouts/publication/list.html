@@ -11,6 +11,8 @@
 {{- with $group }}
 <section class="publication-group">
   <h2>{{ i18n (printf "publication-kind-%s" $k) }}</h2>
+  <p class="publication-group__lead">{{ i18n (printf "publication-kind-lead-%s" $k) }}</p>
+  <div class="publication-group__cards">
   <div class="publication-grid">
     {{- range . }}
     {{- $slides := .Params.slides | default dict }}
@@ -28,6 +30,7 @@
       {{- end }}
     </article>
     {{- end }}
+  </div>
   </div>
 </section>
 {{- end }}

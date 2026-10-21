@@ -2,12 +2,15 @@
 title: "Inclusion numérique : réduire les fractures"
 subtitle: "Comprendre qui reste à l'écart et pourquoi"
 type: presentation
+colorway: nuit
+font: bungee
 image: demo-3.svg
 description: |-
     Panorama des fractures numériques et des pistes pour accompagner les usages.
 authors:
     - Léa Moreau
 slides:
+  content:
     - title: "Une promesse inégale"
       texte: |-
         **Se connecter ne suffit pas :**
@@ -25,7 +28,6 @@ slides:
         - title: "Privées d'équipement"
           texte: "Pas de terminal adapté ou partagé au sein du foyer."
         - title: "En difficulté d'usage"
-          image: demo-1.svg
           texte: "Les gestes de base ne sont pas encore maîtrisés."
         - title: "Désabusées"
           texte: "Un mauvais souvenir ou une crainte qui éloigne du service."

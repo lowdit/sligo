@@ -46,9 +46,8 @@
 
   {{- /* Colorway (préréglage) puis `theme:` explicite, clé par clé. */ -}}
   {{- $preset := dict -}}
-  {{- with .Params.colorway -}}
-    {{- with index (partial "presentation/colorways.html" .) . -}}{{- $preset = . -}}{{- end -}}
-  {{- end -}}
+  {{- $colorway := .Params.colorway | default "papier" -}}
+  {{- with index (partial "presentation/colorways.html" .) $colorway -}}{{- $preset = . -}}{{- end -}}
   {{- $t := .Params.theme | default dict -}}
   {{- $fonts := partial "presentation/display-fonts.html" . -}}
   {{- $display := index $fonts (default "" .Params.font) | default "inherit" -}}
@@ -64,7 +63,7 @@
       --sligo-red: {{ $red | safeCSS }};
       --sligo-muted: {{ or $t.muted (index $preset "muted") "#657083" }};
       --sligo-line: {{ or $t.line (index $preset "line") "rgb(21 29 52 / .14)" | safeCSS }};
-      --sligo-display-font: {{ $display }};
+      --sligo-display-font: {{ $display | safeCSS }};
       --sligo-cover: {{ or $t.cover (index $preset "cover") (or $t.ink "#151d34") }};
     }
   </style>

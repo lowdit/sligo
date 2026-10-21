@@ -2,12 +2,15 @@
 title: "L'accessibilité numérique, une responsabilité partagée"
 subtitle: "Rendre le numérique utilisable par toutes et tous"
 type: presentation
+colorway: papier
+font: optician
 image: demo-1.svg
 description: |-
     Panorama des enjeux d'accessibilité numérique et des leviers d'action pour une organisation.
 authors:
     - Camille Fontaine
 slides:
+  content:
     - title: "Ce que nous allons voir"
       texte: |-
         **Trois temps :**
@@ -51,7 +54,6 @@ slides:
           texte: "Le manque de temps, l'absence de suivi, la solitude du référent."
     - aside:
         - title: "Le pilotage"
-          image: demo-3.svg
           texte: "Une gouvernance claire : rôles, instances, indicateurs."
         - color: "blue"
           title: "Le terrain"

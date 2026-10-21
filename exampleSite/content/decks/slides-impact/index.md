@@ -1,6 +1,6 @@
 ---
 title: "Slides à impact"
-subtitle: "Cinq palettes, trois fontes, un badge"
+subtitle: "Cinq palettes, fontes sans empattement, un badge"
 type: presentation
 date: 2026-10-16
 authors:

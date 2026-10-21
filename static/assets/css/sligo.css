@@ -64,35 +64,86 @@
     min-width: 0;
     margin-inline: auto;
     text-align: center;
+    font-size: clamp(1.05rem, 1.65vw, 1.55rem);
+    line-height: 1.45;
   }
+  .sligo-text p { margin-block: 0.45em; font-size: inherit; line-height: inherit; }
   .sligo-text > :first-child { margin-top: 0; }
   .sligo-text > :last-child { margin-bottom: 0; }
   .sligo-text ul, .sligo-text ol { width: fit-content; max-width: 100%; margin-inline: auto; text-align: left; }
   .sligo-text li { margin-block: .35em; }
-  .sligo-text blockquote { width: 100%; max-width: 100%; margin-inline: 0; padding: .8em 1em; border-inline-start: .22em solid var(--sligo-violet); text-align: left; overflow-wrap: anywhere; }
+  .sligo-text blockquote {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+    padding: .85em 1.1em;
+    border-inline-start: .22em solid var(--sligo-violet);
+    text-align: left;
+    overflow-wrap: anywhere;
+    color: var(--sligo-ink);
+    background: color-mix(in srgb, var(--sligo-bg) 92%, var(--sligo-violet));
+  }
+  .sligo-text blockquote p {
+    margin: 0;
+    color: inherit;
+    font-size: clamp(1.1rem, 2.1vw, 1.75rem);
+    line-height: 1.45;
+    font-weight: 600;
+  }
+  .sligo-text blockquote p + p { margin-top: .65em; }
+  .sligo-slide.dark .sligo-text blockquote {
+    color: var(--sligo-ink);
+    background: color-mix(in srgb, var(--sligo-ink) 12%, transparent);
+    border-inline-start-color: color-mix(in srgb, var(--sligo-violet) 70%, var(--sligo-bg));
+  }
   .sligo-text pre, .sligo-focus pre, .sligo-card pre { width: 100%; max-width: 100%; overflow-x: auto; text-align: left; white-space: pre; }
   .sligo-text code, .sligo-focus code { overflow-wrap: normal; }
 
-  .sligo-kicker, .sligo-eyebrow, .sligo-recall {
-    font-size: .5em;
+  .sligo-kicker, .sligo-eyebrow {
+    font-size: clamp(0.85rem, 1.35vw, 1.15rem);
     font-weight: 800;
     letter-spacing: .08em;
     font-family: var(--r-heading-font);
   }
-  .sligo-kicker { margin-bottom: 1rem; opacity: .7; }
+  .sligo-kicker { margin-bottom: 1rem; opacity: .85; color: var(--sligo-muted); }
   .sligo-part.sligo-part { width: min(80vw, 120rem); max-width: 100ch; text-align: center; margin: auto; }
   .sligo-part h1, .sligo-part h2 { margin: 0; margin-inline: auto; line-height: 1.2 !important; font-size: clamp(3rem, 8vw, 8rem); line-height: .92; }
   .sligo-part h2 { font-size: clamp(1.5rem, 6vw, 6rem); max-width: 100ch;}
 
 
-  .sligo-media { display: grid; place-items: center; min-width: 0; }
-  .sligo-figure { width: 100%; text-align: center; }
-  .sligo-image, .sligo-media img, .sligo-media svg { max-width: 100%; max-height: 64vh; object-fit: contain; }
+  .sligo-media { display: grid; place-items: center; min-width: 0; width: 100%; }
+  .sligo-figure { width: 100%; max-width: min(52rem, 92vw); margin: 0 auto; text-align: center; }
+  .sligo-figure--svg svg { display: block; width: 100%; height: auto; max-height: 64vh; }
+  .sligo-image, .sligo-media img { max-width: 100%; max-height: 64vh; object-fit: contain; }
+  .sligo-media .sligo-figure--svg,
+  .sligo-media .sligo-figure--svg svg { max-width: min(52rem, 92vw); max-height: 64vh; }
   .sligo-figure figcaption { margin-top: .5em; color: var(--sligo-muted); font-size: .5em; }
 
   /* COMPARE — vraie composition plein écran. */
   .sligo-slide:has(> .sligo-compare), .sligo-slide:has(> .sligo-aside) { padding: 0 !important; display: block !important; }
-  .sligo-recall { position: absolute; z-index: 5; inset: 0 0 auto; padding: 0.5em 0; width: calc(100% - 0rem); font-size: 0.8em; text-align: center; opacity: 1; pointer-events: none; background: white;}
+  .sligo-recall {
+    position: absolute;
+    z-index: 5;
+    inset: 0 0 auto;
+    padding: 0.55em 1rem;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: clamp(0.8rem, 1.2vw, 1.05rem);
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-align: center;
+    pointer-events: none;
+    color: var(--sligo-ink);
+    background: color-mix(in srgb, var(--sligo-bg) 90%, var(--sligo-ink));
+    border-bottom: 1px solid var(--sligo-line);
+    font-family: var(--r-heading-font);
+  }
+  .sligo-slide.dark .sligo-recall,
+  .reveal .dark .sligo-recall {
+    color: var(--sligo-bg);
+    background: color-mix(in srgb, var(--sligo-ink) 88%, #000);
+    border-bottom-color: rgb(255 255 255 / .22);
+  }
 
   .sligo-compare { width: 100vw; height: 100vh; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .sligo-compare__column { --sligo-accent-text: var(--sligo-white); min-width: 0; min-height: 100vh; padding: clamp(3.5rem, 8vh, 7rem) clamp(1.5rem, 5vw, 6rem); display: flex !important; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: var(--sligo-accent); color: contrast-color(var(--sligo-accent)); }
@@ -102,9 +153,9 @@
   .sligo-compare__column .sligo-text ul, .sligo-compare__column .sligo-text ol { margin-inline: auto; }
   .sligo-compare__column .sligo-focus { width: 100%; }
   .sligo-color-default { --sligo-accent: #fff; --sligo-accent-text: #151d34; }
-  .sligo-color-violet { --sligo-accent: #4631d4; }
-  .sligo-color-blue { --sligo-accent: #164791; }
-  .sligo-color-red { --sligo-accent: #c61818; }
+  .sligo-color-violet { --sligo-accent: var(--sligo-blue, #164791); --sligo-accent-text: #fff; }
+  .sligo-color-blue { --sligo-accent: var(--sligo-blue, #164791); --sligo-accent-text: #fff; }
+  .sligo-color-red { --sligo-accent: var(--sligo-red, #c61818); --sligo-accent-text: #fff; }
   .sligo-color-cream { --sligo-accent: #b7a57e; --sligo-accent-text: #151d34; }
   .sligo-color-dark { --sligo-accent: #151d34; }
 
@@ -114,9 +165,21 @@
   .sligo-aside__main { background: var(--sligo-bg); }
   .sligo-aside__context { background: var(--sligo-accent); color: var(--sligo-accent-text, white); }
   .sligo-aside__main h2, .sligo-aside__context h2 { width: 100%; margin: 0 0 1rem; font-size: clamp(1.15rem, 2vw, 1.8rem); color: inherit; }
-  .sligo-aside__main .sligo-text, .sligo-aside__context .sligo-text { width: min(100%, 48ch); max-width: 48ch; }
+  .sligo-aside__main .sligo-text,
+  .sligo-aside__context .sligo-text,
+  .sligo-aside__content .sligo-text {
+    width: min(100%, 42ch);
+    max-width: 42ch;
+    font-size: clamp(0.92rem, 1.15vw, 1.08rem);
+    line-height: 1.5;
+    text-align: center;
+  }
+  .sligo-aside__content .sligo-text p { margin-block: 0.35em; }
+  .sligo-aside__context .sligo-text,
+  .sligo-aside__context .sligo-text p { color: inherit; }
   .sligo-aside__context .sligo-focus { border-color: currentColor; background: rgb(255 255 255 / .12); }
-  .sligo-aside__context .sligo-media img, .sligo-aside__context .sligo-media svg { max-height: 48vh; }
+  .sligo-aside__context .sligo-media img,
+  .sligo-aside__context .sligo-media .sligo-figure--svg svg { max-height: 48vh; }
 
   /* STEPS — progression, pas une liste. */
   .sligo-steps { width: min(90vw, 100rem); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: start; }
@@ -125,7 +188,7 @@
   .sligo-step:last-child::after { display: none; }
   .sligo-step__number { position: relative; z-index: 1; display: grid; place-items: center; width: 3.2rem; height: 3.2rem; line-height: 2; margin: 0 auto 1.3rem; border: 2px solid currentColor; border-radius: 50%; background: var(--sligo-bg); font-size: .55em; font-weight: bold;}
   .sligo-step h2 { position: relative; padding: 0; z-index: 1; margin: 0 0 .5em; font-size: clamp(1rem, 1.8vw, 1.6rem); }
-  .sligo-step > div { font-size: .65em; color: var(--sligo-muted); }
+  .sligo-step > div { font-size: clamp(0.95rem, 1.45vw, 1.35rem); line-height: 1.35; color: var(--sligo-muted); }
 
   /* STATS — chiffre léger, pas dashboard. */
   .sligo-stat { display: grid; justify-items: center; gap: .4rem; text-align: center; }
@@ -144,9 +207,35 @@
 
   /* CARDS — apparition successive assumée. */
   .sligo-cards { width: min(88vw, 78rem); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 2vw, 2rem); align-items: stretch; }
-  .sligo-card { position: relative; overflow: auto; display: flex; flex-direction: column; gap: 1rem; padding: 0 0 .5rem; border: 1px solid var(--sligo-line); border-radius: var(--sligo-radius); background: var(--sligo-white); box-shadow: var(--sligo-shadow); text-align: left; }
-  .sligo-card h2 { display: grid; place-items: center; margin: 0; padding: 0.5ch 1em; min-height: 6rem; font-size: clamp(1.3rem, 2.25vw, 2.2rem); }
-  .sligo-card__text { padding: 0.5ch 1em ; font-size: clamp(1rem, 2vw, 1.8rem); var(--sligo-muted); }
+  .sligo-card {
+    position: relative;
+    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 0 .5rem;
+    border: 1px solid color-mix(in srgb, var(--sligo-ink) 14%, transparent);
+    border-radius: var(--sligo-radius);
+    background: #fff;
+    color: #151d34;
+    box-shadow: var(--sligo-shadow);
+    text-align: left;
+  }
+  .sligo-card h2 {
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: 0.5ch 1em;
+    min-height: 6rem;
+    font-size: clamp(1.15rem, 2vw, 1.65rem);
+    color: #151d34;
+  }
+  .sligo-card__text {
+    padding: 0.5ch 1em 0.85em;
+    font-size: clamp(0.95rem, 1.35vw, 1.15rem);
+    line-height: 1.45;
+    color: #3b4454;
+  }
   
   /* CARDS — composition verticale */
   .sligo-slide.cards-vertical .sligo-cards {
@@ -173,7 +262,7 @@
   }
   .sligo-slide:not(.cards-vertical):has(.sligo-card__text) .sligo-card h2 {
     color: #fff;
-    background: var(--sligo-violet);
+    background: var(--sligo-cover, var(--sligo-blue, #12246e));
   }
   .sligo-slide.cards-vertical .sligo-card::before {
     content: counter(sligo-card);
@@ -199,8 +288,8 @@
     width: 2.8rem;
     height: 2.8rem;
     border-radius: 50%;
-    background: var(--sligo-violet);
-    color: var(--sligo-white);
+    background: var(--sligo-cover, var(--sligo-blue, #12246e));
+    color: #fff;
     font-weight: 700;
     font-size: 2.25rem;
     line-height: 1.4;
@@ -227,7 +316,7 @@
   .sligo-quiz__choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
   .sligo-quiz__choice { min-width: 0; min-height: 5rem; display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 1rem; padding: 1rem 1.2rem; border: 1px solid var(--sligo-line); border-radius: var(--sligo-radius); background: white; color: var(--sligo-ink); font: inherit; text-align: left; cursor: pointer; transition: transform .18s ease, border-color .18s ease, background-color .18s ease; }
   .sligo-quiz__choice:hover, .sligo-quiz__choice:focus-visible { transform: translateY(-2px); border-color: var(--sligo-violet); outline: none; }
-  .sligo-quiz__letter { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--sligo-cream); font-size: .6em; font-weight: 800; }
+  .sligo-quiz__letter { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; font-size: .6em; font-weight: 800; }
   .sligo-quiz__choice.is-correct { border-color: #238636; background: #eaf7ed; }
   .sligo-quiz__choice.is-wrong { border-color: var(--sligo-red); background: #fff0f0; }
   .sligo-quiz__feedback { padding: 1rem 1.2rem; border-inline-start: .25rem solid var(--sligo-violet); background: color-mix(in srgb, var(--sligo-violet) 7%, white); text-align: center; }
@@ -240,15 +329,22 @@
 
 
 /* Reveal est une feuille tierce : les overrides restent volontairement hors layer. */
-.reveal .fragment { transition: opacity .28s ease, transform .28s ease; }
+.reveal .fragment {
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
 .reveal .fragment:not(.visible) { opacity: 0; }
-.reveal .sligo-card.fragment:not(.visible) { transform: translateY(1.5rem); }
-.reveal .sligo-step.fragment:not(.visible) { transform: translateY(.5rem); }
-.reveal .sligo-stat.fragment:not(.visible) { transform: scale(.97); }
-.reveal .sligo-statement__text { animation: sligo-statement-in .45s ease both; }
+.reveal .sligo-card.fragment:not(.visible) { transform: translateY(1rem); }
+.reveal .sligo-step.fragment:not(.visible) { transform: translateY(0.65rem); }
+.reveal .sligo-stat.fragment:not(.visible) { transform: translateY(0.5rem) scale(0.98); opacity: 0; }
+.reveal .sligo-stat.fragment.visible { opacity: 1; transform: none; }
+.reveal .sligo-stat strong { font-variant-numeric: tabular-nums; }
+.reveal .sligo-statement__text { animation: sligo-statement-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) both; }
 
 @keyframes sligo-statement-in {
-  from { opacity: 0; transform: translateY(.25em); }
+  from { opacity: 0; transform: translateY(0.35em); }
   to { opacity: 1; transform: translateY(0); }
 }
 

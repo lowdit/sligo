@@ -3,7 +3,7 @@ title: "Une IA éthique en 5 décisions"
 subtitle: "Synthèse exécutive pour comités de direction"
 kind: synthese
 colorway: vin
-font: subjectivity
+font: optician
 roles:
   - conferencier
   - professeur

@@ -16,7 +16,8 @@
     <p>{{ i18n "home-decks-sub" | default "Decks prêts à projeter — accessibles, sobres, mémorables." }}</p>
   </div>
   {{- with $sec -}}
-    {{- $pages := .RegularPages.ByDate.Reverse -}}
+    {{- $pages := where .RegularPages "File.ContentBaseName" "!=" "slides-impact" -}}
+    {{- $pages = $pages.ByDate.Reverse -}}
     <section class="catalog-grid sligo-deck-grid">
       {{- range $i, $p := $pages -}}
         {{ partial "presentation/card-deck.html" (dict "page" $p "index" $i) }}
