@@ -35,4 +35,6 @@ Puis `hugo server` : vos présentations se construisent depuis `content/decks/`.
 
 ## GitHub Pages (votre site)
 
+**Base URL org Lowdit (cible)** : `https://lowdit.github.io/sligo/` — voir [`docs/GITHUB-PAGES.md`](https://github.com/lowdit/sligo/blob/main/docs/GITHUB-PAGES.md) dans le dépôt.
+
 Le workflow construit `exampleSite/` par défaut ; passez à `.` dans `.github/hugo-site-dir` si votre `content/` est à la racine.
