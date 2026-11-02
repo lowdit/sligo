@@ -119,6 +119,29 @@
   .sligo-media .sligo-figure--svg svg { max-width: min(52rem, 92vw); max-height: 64vh; }
   .sligo-figure figcaption { margin-top: .5em; color: var(--sligo-muted); font-size: .5em; }
 
+  /* Un texte long + une figure plafonnée à 64vh peut dépasser le canvas
+     d'une slide. La figure devient alors flexible : elle se réduit dans
+     l'espace restant au lieu de déborder sous le bas de la slide. */
+  body:not(.sligo-reader) .reveal .slides section.sligo-slide > .sligo-media {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+  body:not(.sligo-reader) .reveal .slides section.sligo-slide > .sligo-media .sligo-figure {
+    height: 100%;
+    min-height: 0;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    align-items: center;
+    justify-items: center;
+  }
+  body:not(.sligo-reader) .reveal .slides section.sligo-slide > .sligo-media .sligo-figure > img,
+  body:not(.sligo-reader) .reveal .slides section.sligo-slide > .sligo-media .sligo-figure--svg > svg {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: min(100%, 64vh);
+  }
+
   /* COMPARE — vraie composition plein écran. */
   .sligo-slide:has(> .sligo-compare), .sligo-slide:has(> .sligo-aside) { padding: 0 !important; display: block !important; }
   .sligo-recall {
@@ -356,6 +379,118 @@
   .sligo-step::after { top: 100%; left: 50%; width: 1px; height: 1rem; }
   .sligo-step:last-child::after { display: none; }
   .sligo-quiz__choices { grid-template-columns: 1fr; }
+}
+
+/* ÉCRANS ÉTROITS — lecteur vertical Sligo.
+   Reveal reste le moteur desktop. Sous 900 px, sligo.js n'initialise pas la
+   scène 16:9 : les slides sont remises dans le flux, une par section, avec
+   défilement vertical natif et fragments visibles. Pas de canvas rogné. */
+body.sligo-reader {
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--sligo-bg);
+}
+
+body.sligo-reader .reveal {
+  position: static;
+  width: 100%;
+  height: auto;
+  min-height: 100svh;
+  overflow: visible;
+  touch-action: auto;
+}
+
+body.sligo-reader .reveal .slides {
+  position: static;
+  width: 100% !important;
+  height: auto !important;
+  overflow: visible;
+  transform: none !important;
+  left: auto !important;
+  top: auto !important;
+  display: block;
+}
+
+body.sligo-reader .reveal .slides > section,
+body.sligo-reader .reveal .slides > section.sligo-slide {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100svh;
+  margin: 0 !important;
+  padding: clamp(2rem, 7vh, 4rem) var(--sligo-gutter) !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: visible !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
+body.sligo-reader .reveal .slides > section.sligo-slide + section.sligo-slide {
+  border-top: 1px solid var(--sligo-line);
+}
+
+body.sligo-reader .reveal .slides > section.sligo-cover {
+  display: grid !important;
+  place-items: center;
+}
+
+body.sligo-reader .reveal .slides > section.sligo-slide:has(> .sligo-compare),
+body.sligo-reader .reveal .slides > section.sligo-slide:has(> .sligo-aside),
+body.sligo-reader .reveal .slides > section.sligo-slide:has(> .sligo-radial) {
+  padding: 0 !important;
+  display: block !important;
+}
+
+body.sligo-reader .reveal .slides > section.sligo-slide .sligo-compare,
+body.sligo-reader .reveal .slides > section.sligo-slide .sligo-aside {
+  height: auto;
+  min-height: 100svh;
+}
+
+/* Fragments : dans un lecteur, tout le propos doit être lisible sans clic. */
+body.sligo-reader .reveal .fragment {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}
+
+/* Radial : la disposition circulaire n'a pas de sens à 320 px. */
+body.sligo-reader .sligo-radial {
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: clamp(2rem, 7vh, 4rem) var(--sligo-gutter);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+body.sligo-reader .sligo-radial::before {
+  display: none;
+}
+
+body.sligo-reader .sligo-radial__center {
+  width: min(100%, 17rem);
+  margin: 0 auto 1rem;
+}
+
+body.sligo-reader .sligo-radial__item {
+  position: static;
+  width: 100%;
+  min-height: 0;
+  padding: 1rem 1.2rem;
+  transform: none;
+  border-radius: var(--sligo-radius);
+}
+
+body.sligo-reader .sligo-radial__item strong,
+body.sligo-reader .sligo-radial__item small {
+  max-width: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

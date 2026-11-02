@@ -23,16 +23,7 @@
   {{ with .Site.Params.tile_color }}<meta name="msapplication-TileColor" content="{{ . }}">{{ else }}<meta name="msapplication-TileColor" content="#000">{{ end }}
   {{ with .Site.Params.theme_color }}<meta name="theme-color" content="{{ . }}">{{ else }}<meta name="theme-color" content="#000">{{ end }}
 
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="{{ .Title }}">
-  {{ with .Description }}<meta property="og:description" content="{{ . | plainify | htmlEscape }}">{{ end }}
-  <meta property="og:url" content="{{ .Permalink }}">
-  <meta property="og:locale" content="{{ $.Site.Language.Locale | default "fr_FR" }}">
-  {{ with .Params.image }}<meta property="og:image" content="{{ printf "images/%s" . | absURL }}">{{ end }}
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ .Title }}">
-  {{ with .Description }}<meta name="twitter:description" content="{{ . | plainify | htmlEscape }}">{{ end }}
-  {{ with .Params.image }}<meta name="twitter:image" content="{{ printf "images/%s" . | absURL }}">{{ end }}
+  {{ partial "lowdit/social-meta.html" . }}
 
   <link rel="stylesheet" href="{{ "assets/css/fonts.css" | relURL }}">
   <link rel="stylesheet" href="{{ "assets/css/keyboard.css" | relURL }}">

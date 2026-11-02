@@ -9,6 +9,7 @@ theme = ["minigo", "sligo"]
 [params.lowdit]
   logo = "logos/sligo.png"
   faviconDir = "favicons/sligo"
+  socialImage = "/assets/social/twittercard-default.png"
   siteProfile = "presentations"
   view = "deck-studio"
   homeEyebrow = "Présentations · studio"

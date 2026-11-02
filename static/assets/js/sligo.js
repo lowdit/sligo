@@ -85,11 +85,29 @@
     });
   }
 
+  var READER_QUERY = '(max-width: 900px)';
+
+  function bootReader(root) {
+    document.body.classList.add('sligo-reader');
+    root.querySelectorAll('.slides section[data-background-color]').forEach(function (slide) {
+      slide.style.backgroundColor = slide.dataset.backgroundColor;
+    });
+    initQuiz(root);
+    root.querySelectorAll('.sligo-stat').forEach(animateStat);
+  }
+
   function boot() {
     var root = document.querySelector('.deck1');
-    if (!root || typeof Reveal === 'undefined') return;
+    if (!root) return;
 
     addListFragments(root);
+
+    if (window.matchMedia && window.matchMedia(READER_QUERY).matches) {
+      bootReader(root);
+      return;
+    }
+
+    if (typeof Reveal === 'undefined') return;
 
     var deck = new Reveal(root, {
       controls: false,
@@ -118,6 +136,19 @@
       var current = root.querySelector('.slides section.present');
       animateStatsInSlide(current);
     });
+  }
+
+  if (window.matchMedia) {
+    var readerMedia = window.matchMedia(READER_QUERY);
+    var onReaderChange = function (event) {
+      var reader = document.body.classList.contains('sligo-reader');
+      if (event.matches !== reader) window.location.reload();
+    };
+    if (readerMedia.addEventListener) {
+      readerMedia.addEventListener('change', onReaderChange);
+    } else if (readerMedia.addListener) {
+      readerMedia.addListener(onReaderChange);
+    }
   }
 
   if (document.readyState === 'loading') {

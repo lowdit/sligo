@@ -145,6 +145,11 @@ Le CSS utilise :
 - `@layer` pour organiser le CSS Sligo ;
 - une zone d'overrides hors layer pour rester prévisible face au CSS Reveal.js non layerisé.
 
+Dans une slide à texte, le média est un élément flex qui peut se réduire
+(`flex: 1 1 auto`, `min-height: 0`) et la figure se cale sur la hauteur
+restante. Un texte long + une image plafonnée à `64vh` ne déborde donc plus
+sous le canvas. En mode lecteur vertical, le média reprend sa hauteur naturelle.
+
 Les compositions pleine page utilisent `width: 100vw` / `height: 100vh` et ne doivent pas être traitées comme de simples cards dans une slide.
 
 ## Reveal.js
@@ -152,6 +157,16 @@ Les compositions pleine page utilisent `width: 100vw` / `height: 100vh` et ne do
 Reveal reste le moteur : navigation, fragments, transitions, clavier, notes, highlight et PDF.
 
 Sligo ajoute seulement les traductions nécessaires : listes -> fragments, stats -> count-up léger, quiz -> interaction, SVG -> fragments déjà présents dans le SVG.
+
+### Écrans étroits : lecteur vertical
+
+Sous 900 px, Sligo n'initialise pas la scène Reveal. `sligo.js` ajoute
+`body.sligo-reader` ; le CSS remet les sections dans le flux, une par section,
+en hauteur naturelle. Le document défile verticalement, les fragments sont
+visibles sans clic, les fonds `data-background-color` sont réappliqués et le
+radial devient une pile. La navigation clavier/tactile est celle du défilement
+natif ; un changement de largeur qui traverse le seuil recharge la page pour
+réinitialiser le bon mode. Desktop et impression gardent Reveal.
 
 ## Accessibilité
 
